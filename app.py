@@ -253,6 +253,7 @@ document.getElementById('rGrid').addEventListener('click',function(e){var btn=e.
 function ss(msg,type){var el=document.getElementById('sb');el.textContent=msg;el.className='sb on '+(type||'info');}
 function sp(pct,lbl){var w=document.getElementById('prog'),f=document.getElementById('pf'),l=document.getElementById('pl');if(pct<0){w.classList.remove('on');return;}w.classList.add('on');f.style.width=pct+'%';l.textContent=lbl||'';}
 function api(data){return fetch('/api',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||j.detail||j.message||'Blad '+res.status);return j;});});}
+function uploadImg(dataUri,key){if(!dataUri||!dataUri.startsWith('data:'))return Promise.resolve(dataUri);return fetch('/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({auth:'Key '+key,data_url:dataUri})}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||'Upload blad '+res.status);if(!j.url)throw new Error('Brak URL z uploadu');return j.url;});});}
 function poll(key,reqId,baseEp){
   var start=Date.now(),attempts=0;
   function attempt(){return new Promise(function(r){setTimeout(r,2500);}).then(function(){
@@ -267,7 +268,7 @@ function poll(key,reqId,baseEp){
   });}
   return attempt();
 }
-function mkpayload(){var prompt=document.getElementById('promptTxt').value.trim();var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;var type=info?info.t:et;if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto'};if(ep.indexOf('image-to-image')!==-1)return{image_url:pUri,prompt:prompt,strength:0.8,num_inference_steps:28};if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pUri?[pUri]:[]};if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pUri};return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};}
+function mkpayload(pu,mu){var prompt=document.getElementById('promptTxt').value.trim();var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;var type=info?info.t:et;if(type==='tryon')return{model_image:mu,garment_image:pu,category:S.cat,mode:S.mode,garment_photo_type:'auto'};if(ep.indexOf('image-to-image')!==-1)return{image_url:pu,prompt:prompt,strength:0.8,num_inference_steps:28};if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pu?[pu]:[]};if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pu};return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};}
 function imgs(res){if(res.images)return res.images.map(function(i){return typeof i==='string'?i:i.url;}).filter(Boolean);if(res.image)return[typeof res.image==='string'?res.image:res.image.url];return[];}
 function addCard(url){var card=document.createElement('div');card.className='ic';card.dataset.url=url;var img=document.createElement('img');img.src=url;img.loading='lazy';var ov=document.createElement('div');ov.className='io';var b1=document.createElement('button');b1.className='ib2';b1.dataset.a='dl';b1.textContent='Pobierz';var b2=document.createElement('button');b2.className='ib2';b2.dataset.a='open';b2.textContent='Pelny';ov.appendChild(b1);ov.appendChild(b2);card.appendChild(img);card.appendChild(ov);document.getElementById('rGrid').appendChild(card);}
 document.getElementById('genBtn').addEventListener('click',function(){
@@ -283,12 +284,14 @@ document.getElementById('genBtn').addEventListener('click',function(){
   document.getElementById('skelWrap').style.display='block';
   var sg=document.getElementById('skelGrid');sg.innerHTML='';
   for(var i=0;i<shots;i++){var sk=document.createElement('div');sk.className='sk';var skp=document.createElement('p');skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';sk.appendChild(skp);sg.appendChild(sk);}
-  sp(10,'Wysylanie...');ss('Wysylanie do '+ep+'...','info');document.getElementById('qi').style.display='block';
+  sp(10,'Wysylanie...');ss('Uploadowanie zdjec...','info');document.getElementById('qi').style.display='block';
   var results=[],tot=0;
+  var _pUri=pUri,_mUri=mUri;
+  Promise.all([uploadImg(_pUri,key),uploadImg(_mUri,key)]).then(function(urls){_pUri=urls[0];_mUri=urls[1];ss('Wysylanie do '+ep+'...','info');doShot(0);}).catch(function(err){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';sp(-1);ss('Blad uploadu: '+(err.message||'Nieznany blad'),'err');document.getElementById('emptyEl').style.display='flex';busy=false;document.getElementById('genBtn').disabled=false;});
   function doShot(idx){
     if(idx>=shots){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';results.forEach(function(res){imgs(res).forEach(function(url){addCard(url);tot++;});});document.getElementById('rCount').textContent=tot+' zdiec';sp(-1);ss('Gotowe! '+tot+' zdiec wygenerowanych.','ok');busy=false;document.getElementById('genBtn').disabled=false;return;}
     sp(15+idx*20,'Zdjecie '+(idx+1)+'/'+shots+'...');
-    api({action:'submit',auth:'Key '+key,endpoint:ep,payload:mkpayload()}).then(function(sub){
+    api({action:'submit',auth:'Key '+key,endpoint:ep,payload:mkpayload(_pUri,_mUri)}).then(function(sub){
       if(sub.request_id)return poll(key,sub.request_id,eb);
       return sub;
     }).then(function(res){results.push(res);doShot(idx+1);}).catch(function(err){
@@ -335,6 +338,58 @@ def index():
             "img-src * data: blob:;"
         )
     }
+
+
+@app.route('/upload', methods=['POST', 'OPTIONS'])
+def upload():
+    if request.method == 'OPTIONS':
+        return '', 204, {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        }
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Invalid JSON'}), 400
+
+    auth = data.get('auth', '')
+    data_url = data.get('data_url', '')
+
+    if not data_url.startswith('data:'):
+        return jsonify({'error': 'Expected data URI'}), 400
+
+    try:
+        import base64
+        header, encoded = data_url.split(',', 1)
+        mime = header.split(':')[1].split(';')[0]
+        img_bytes = base64.b64decode(encoded)
+    except Exception as e:
+        return jsonify({'error': 'Failed to decode image: ' + str(e)}), 400
+
+    target = 'https://storage.fal.ai/upload'
+    headers = {
+        'Authorization': auth,
+        'Content-Type': mime,
+        'User-Agent': 'AI-Model-Studio/2.0'
+    }
+    req = urllib.request.Request(target, data=img_bytes, method='POST', headers=headers)
+    ctx = ssl.create_default_context()
+    try:
+        with urllib.request.urlopen(req, context=ctx, timeout=60) as r:
+            result = json.loads(r.read())
+            url = result.get('url', '')
+            return jsonify({'url': url}), 200, {'Access-Control-Allow-Origin': '*'}
+    except urllib.error.HTTPError as e:
+        body = e.read()
+        try:
+            err = json.loads(body)
+        except Exception:
+            err = {'error': body.decode('utf-8', errors='replace')}
+        return Response(json.dumps(err), status=e.code, content_type='application/json',
+                        headers={'Access-Control-Allow-Origin': '*'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 502, {'Access-Control-Allow-Origin': '*'}
 
 
 @app.route('/api', methods=['POST', 'OPTIONS'])
