@@ -101,7 +101,7 @@ textarea{resize:vertical;min-height:72px;line-height:1.55}
 <body>
 <div class="hdr">
   <div class="logo">AI MODEL <span>STUDIO</span></div>
-  <div style="font-size:11px;color:rgba(240,236,230,0.3)">fal.ai · 600+ modeli</div>
+  <div style="font-size:11px;color:rgba(240,236,230,0.3)">fal.ai</div>
   <div class="online">● online</div>
 </div>
 <div class="layout">
@@ -114,83 +114,79 @@ textarea{resize:vertical;min-height:72px;line-height:1.55}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
     </div>
-    <div class="hint"><a href="https://fal.ai/dashboard/keys" target="_blank">fal.ai/dashboard/keys</a> &nbsp;·&nbsp; <a href="https://fal.ai/dashboard/billing" target="_blank">doładowanie</a></div>
+    <div class="hint"><a href="https://fal.ai/dashboard/keys" target="_blank">fal.ai/dashboard/keys</a> &nbsp;·&nbsp; <a href="https://fal.ai/dashboard/billing" target="_blank">doladowanie</a></div>
   </div>
   <div class="sec">
     <div class="stitle">Model AI</div>
-    <div class="flbl">Popularne modele do mody</div>
+    <div class="flbl">Popularne modele</div>
     <div class="popular-grid" id="popularGrid">
       <div class="pcard on" data-endpoint="fal-ai/fashn/tryon/v1.6" data-type="tryon">
         <div class="pcard-name">FASHN Try-On</div>
         <div class="pcard-id">fal-ai/fashn/tryon/v1.6</div>
-        <div class="pcard-price">$0.075/zdjęcie</div>
+        <div class="pcard-price">$0.075</div>
         <div class="pcard-tag t-tryon">try-on</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/nano-banana-2/edit" data-type="edit">
         <div class="pcard-name">Nano Banana 2</div>
         <div class="pcard-id">fal-ai/nano-banana-2/edit</div>
-        <div class="pcard-price">$0.039/zdjęcie</div>
+        <div class="pcard-price">$0.039</div>
         <div class="pcard-tag t-edit">Gemini 3.1</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/gemini-3-pro-image-preview" data-type="edit">
         <div class="pcard-name">Nano Banana Pro</div>
         <div class="pcard-id">fal-ai/gemini-3-pro-image-preview</div>
-        <div class="pcard-price">$0.15/zdjęcie</div>
+        <div class="pcard-price">$0.15</div>
         <div class="pcard-tag t-edit">Gemini 3 Pro</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/flux-2/edit" data-type="edit">
         <div class="pcard-name">FLUX.2 Edit</div>
         <div class="pcard-id">fal-ai/flux-2/edit</div>
-        <div class="pcard-price">$0.05/zdjęcie</div>
-        <div class="pcard-tag t-edit">image edit</div>
+        <div class="pcard-price">$0.05</div>
+        <div class="pcard-tag t-edit">img edit</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/flux/dev/image-to-image" data-type="edit">
         <div class="pcard-name">FLUX img2img</div>
         <div class="pcard-id">fal-ai/flux/dev/image-to-image</div>
-        <div class="pcard-price">$0.025/zdjęcie</div>
+        <div class="pcard-price">$0.025</div>
         <div class="pcard-tag t-edit">img2img</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/flux/dev" data-type="gen">
         <div class="pcard-name">FLUX Dev</div>
         <div class="pcard-id">fal-ai/flux/dev</div>
-        <div class="pcard-price">$0.025/zdjęcie</div>
-        <div class="pcard-tag t-gen">text to image</div>
+        <div class="pcard-price">$0.025</div>
+        <div class="pcard-tag t-gen">text2img</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/flux/schnell" data-type="gen">
         <div class="pcard-name">FLUX Schnell</div>
         <div class="pcard-id">fal-ai/flux/schnell</div>
-        <div class="pcard-price">$0.003/zdjęcie</div>
+        <div class="pcard-price">$0.003</div>
         <div class="pcard-tag t-gen">szybki</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/recraft-v3" data-type="gen">
         <div class="pcard-name">Recraft V3</div>
         <div class="pcard-id">fal-ai/recraft-v3</div>
-        <div class="pcard-price">$0.04/zdjęcie</div>
-        <div class="pcard-tag t-gen">wektory/foto</div>
+        <div class="pcard-price">$0.04</div>
+        <div class="pcard-tag t-gen">foto</div>
       </div>
       <div class="pcard" data-endpoint="fal-ai/ideogram/v3" data-type="gen">
         <div class="pcard-name">Ideogram V3</div>
         <div class="pcard-id">fal-ai/ideogram/v3</div>
-        <div class="pcard-price">$0.08/zdjęcie</div>
-        <div class="pcard-tag t-gen">tekst w obrazie</div>
+        <div class="pcard-price">$0.08</div>
+        <div class="pcard-tag t-gen">tekst</div>
       </div>
     </div>
     <div style="margin-top:12px">
-      <div class="flbl">Lub wpisz własny endpoint z fal.ai</div>
+      <div class="flbl">Lub wpisz wlasny endpoint</div>
       <div class="row">
         <input type="text" id="customEndpoint" placeholder="np. fal-ai/flux-pro/v1.1-ultra" style="font-family:monospace;font-size:11px">
-        <a href="https://fal.ai/explore/models" target="_blank">
-          <button class="iBtn" title="Przeglądaj modele">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          </button>
-        </a>
+        <a href="https://fal.ai/explore/models" target="_blank"><button class="iBtn" title="Przegladaj modele"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></a>
       </div>
-      <div class="hint">Znajdź na <a href="https://fal.ai/explore/models" target="_blank">fal.ai/explore/models</a></div>
+      <div class="hint">Znajdz na <a href="https://fal.ai/explore/models" target="_blank">fal.ai/explore/models</a></div>
     </div>
-    <div class="model-pill" id="activePill">✦ fal-ai/fashn/tryon/v1.6</div>
+    <div class="model-pill" id="activePill">fal-ai/fashn/tryon/v1.6</div>
   </div>
   <div class="sec" id="uploadSec">
-    <div class="stitle">Zdjęcia wejściowe</div>
+    <div class="stitle">Zdjecia wejsciowe</div>
     <div class="upcols">
       <div>
         <div class="upzone" id="pZone">
@@ -199,24 +195,16 @@ textarea{resize:vertical;min-height:72px;line-height:1.55}
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" opacity="0.5"><rect x="4" y="6" width="24" height="22" rx="3" stroke="#c9a96e" stroke-width="1.2"/><rect x="9" y="12" width="14" height="10" rx="2" stroke="#c9a96e" stroke-width="1"/></svg>
           <h4>Ubranie</h4><p>Wieszak / flat-lay</p>
         </div>
-        <div class="prev" id="pPrev">
-          <img id="pImg" src="" alt="">
-          <div class="plbl">Produkt</div>
-          <button class="dBtn" id="delP">✕</button>
-        </div>
+        <div class="prev" id="pPrev"><img id="pImg" src="" alt=""><div class="plbl">Produkt</div><button class="dBtn" id="delP">x</button></div>
       </div>
       <div id="modelCol">
         <div class="upzone" id="mZone">
           <input type="file" id="mFile" accept="image/jpeg,image/png,image/webp">
           <div class="badge bm">Modelka</div>
           <svg width="22" height="22" viewBox="0 0 32 32" fill="none" opacity="0.5"><circle cx="16" cy="10" r="5" stroke="#378add" stroke-width="1.2"/><path d="M6 28c0-5.52 4.48-10 10-10s10 4.48 10 10" stroke="#378add" stroke-width="1.2" stroke-linecap="round"/></svg>
-          <h4>Modelka</h4><p>Pełna sylwetka</p>
+          <h4>Modelka</h4><p>Pelna sylwetka</p>
         </div>
-        <div class="prev" id="mPrev">
-          <img id="mImg" src="" alt="">
-          <div class="plbl">Modelka</div>
-          <button class="dBtn" id="delM">✕</button>
-        </div>
+        <div class="prev" id="mPrev"><img id="mImg" src="" alt=""><div class="plbl">Modelka</div><button class="dBtn" id="delM">x</button></div>
       </div>
     </div>
     <div id="presetWrap" style="margin-top:10px">
@@ -234,34 +222,34 @@ textarea{resize:vertical;min-height:72px;line-height:1.55}
     <div style="margin-bottom:10px">
       <div class="flbl">Typ ubrania</div>
       <div class="chips">
-        <div class="chip on" data-g="cat" data-v="upper_body">Góra — bluzka / top</div>
-        <div class="chip" data-g="cat" data-v="lower_body">Dół — spodnie / spódnica</div>
-        <div class="chip" data-g="cat" data-v="one-piece">Sukienka / kombinezon</div>
+        <div class="chip on" data-g="cat" data-v="tops">Gora - bluzka / top</div>
+        <div class="chip" data-g="cat" data-v="bottoms">Dol - spodnie / spodnica</div>
+        <div class="chip" data-g="cat" data-v="one-pieces">Sukienka / kombinezon</div>
       </div>
     </div>
     <div>
       <div class="flbl">Tryb</div>
       <div class="chips">
         <div class="chip on" data-g="mode" data-v="balanced">Balans</div>
-        <div class="chip" data-g="mode" data-v="fast">Szybki</div>
-        <div class="chip" data-g="mode" data-v="quality">Wysoka jakość</div>
+        <div class="chip" data-g="mode" data-v="performance">Szybki</div>
+        <div class="chip" data-g="mode" data-v="quality">Wysoka jakosc</div>
       </div>
     </div>
   </div>
   <div class="sec" id="promptSec" style="display:none">
     <div class="stitle">Prompt / opis</div>
-    <textarea id="promptTxt" placeholder="Opisz co chcesz wygenerować..."></textarea>
+    <textarea id="promptTxt" placeholder="Opisz co chcesz wygenerowac..."></textarea>
     <div class="hint" id="promptHint"></div>
   </div>
   <div class="sec">
-    <div class="stitle">Liczba zdjęć</div>
+    <div class="stitle">Liczba zdiec</div>
     <div style="display:flex;align-items:center;gap:12px">
       <input type="range" min="1" max="4" value="1" step="1" id="nShots" style="flex:1;-webkit-appearance:none;height:2px;background:rgba(240,236,230,0.15);border-radius:2px;outline:none;padding:0;accent-color:#c9a96e">
       <span style="font-size:13px;color:#c9a96e;min-width:20px;text-align:right" id="nVal">1</span>
     </div>
-    <div class="hint" id="costHint">~$0.075 za 1 zdjęcie</div>
+    <div class="hint" id="costHint">~$0.075 za 1 zdjecie</div>
   </div>
-  <button class="gen-btn" id="genBtn">✦ Generuj zdjęcia</button>
+  <button class="gen-btn" id="genBtn">Generuj zdjecia</button>
 </div>
 <div class="rpanel">
   <div style="display:flex;align-items:center;justify-content:space-between">
@@ -269,11 +257,7 @@ textarea{resize:vertical;min-height:72px;line-height:1.55}
     <div style="font-size:11px;color:rgba(240,236,230,0.3)" id="rCount"></div>
   </div>
   <div class="status" id="statusBar"></div>
-  <div class="prog" id="progEl">
-    <div class="dot"></div>
-    <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
-    <div id="pLbl" style="min-width:150px;text-align:right;font-size:11px"></div>
-  </div>
+  <div class="prog" id="progEl"><div class="dot"></div><div class="prog-bar"><div class="prog-fill" id="pFill"></div></div><div id="pLbl" style="min-width:150px;text-align:right;font-size:11px"></div></div>
   <div id="qInfo" style="font-size:11px;color:rgba(240,236,230,0.3);text-align:center;display:none;padding:4px 0"></div>
   <div class="empty" id="emptyEl">
     <svg width="50" height="50" viewBox="0 0 50 50" fill="none"><rect x="5" y="7" width="20" height="36" rx="4" stroke="currentColor" stroke-width="1.2"/><path d="M9 15h12M9 21h8M9 27h10M9 33h6" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.5"/><circle cx="36" cy="26" r="10" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -286,38 +270,37 @@ textarea{resize:vertical;min-height:72px;line-height:1.55}
 <script>
 (function(){
 'use strict';
-var S={cat:'upper_body',mode:'balanced'};
+var S={cat:'tops',mode:'balanced'};
 var pUri=null,mUri=null,busy=false;
 var activeEndpoint='fal-ai/fashn/tryon/v1.6';
 var activeType='tryon';
 var MI={
-  'fal-ai/fashn/tryon/v1.6':{price:0.075,type:'tryon',ph:'',hint:'Wgraj ubranie + modelkę. FASHN zachowuje kolory i wzory produktu.'},
-  'fal-ai/nano-banana-2/edit':{price:0.039,type:'edit',ph:'Put this clothing item on a professional fashion model, white studio background, full body shot, photorealistic',hint:'Gemini 3.1 Flash — edytuje zdjęcie produktu wg opisu.'},
-  'fal-ai/gemini-3-pro-image-preview':{price:0.15,type:'edit',ph:'Create a luxury fashion editorial photo featuring this garment on an elegant model, dramatic lighting, Vogue style',hint:'Gemini 3 Pro — najwyższa jakość do klientów premium.'},
-  'fal-ai/flux-2/edit':{price:0.05,type:'edit',ph:'Professional fashion model wearing this clothing item, clean white studio background, full body, commercial photography',hint:'FLUX.2 Edit — edycja ze zdjęciem produktu.'},
-  'fal-ai/flux/dev/image-to-image':{price:0.025,type:'edit',ph:'Fashion model wearing this clothing, white studio background, professional product photography',hint:'FLUX Dev img2img — transformuje zdjęcie produktu.'},
-  'fal-ai/flux/dev':{price:0.025,type:'gen',ph:'Professional fashion model wearing elegant clothing, white studio background, full body shot, 8K',hint:'FLUX Dev — generuje z opisu tekstowego.'},
-  'fal-ai/flux/schnell':{price:0.003,type:'gen',ph:'Fashion model in elegant outfit, white background, professional photo',hint:'FLUX Schnell — szybki (~3 sek), tani.'},
-  'fal-ai/recraft-v3':{price:0.04,type:'gen',ph:'Professional fashion model in stylish clothing, clean studio background, editorial photography',hint:'Recraft V3 — świetny do fotografii produktowej.'},
-  'fal-ai/ideogram/v3':{price:0.08,type:'gen',ph:'Professional fashion model wearing stylish clothes, studio background, commercial photography',hint:'Ideogram V3 — najlepszy do obrazów z tekstem.'}
+  'fal-ai/fashn/tryon/v1.6':{price:0.075,type:'tryon',ph:'',hint:'Wgraj ubranie i modelke. FASHN zachowuje kolory i wzory produktu.'},
+  'fal-ai/nano-banana-2/edit':{price:0.039,type:'edit',ph:'Put this clothing item on a professional fashion model, white studio background, full body shot, photorealistic',hint:'Gemini 3.1 Flash - edytuje zdjecie produktu wg opisu.'},
+  'fal-ai/gemini-3-pro-image-preview':{price:0.15,type:'edit',ph:'Create a luxury fashion editorial photo featuring this garment on an elegant model, dramatic lighting, Vogue style',hint:'Gemini 3 Pro - najwyzsza jakosc.'},
+  'fal-ai/flux-2/edit':{price:0.05,type:'edit',ph:'Professional fashion model wearing this clothing item, clean white studio background, full body',hint:'FLUX.2 Edit.'},
+  'fal-ai/flux/dev/image-to-image':{price:0.025,type:'edit',ph:'Fashion model wearing this clothing, white studio background, professional photography',hint:'FLUX Dev img2img.'},
+  'fal-ai/flux/dev':{price:0.025,type:'gen',ph:'Professional fashion model wearing elegant clothing, white studio background, full body shot, 8K',hint:'FLUX Dev - generuje z opisu tekstowego.'},
+  'fal-ai/flux/schnell':{price:0.003,type:'gen',ph:'Fashion model in elegant outfit, white background, professional photo',hint:'FLUX Schnell - szybki (~3 sek).'},
+  'fal-ai/recraft-v3':{price:0.04,type:'gen',ph:'Professional fashion model in stylish clothing, clean studio background, editorial photography',hint:'Recraft V3.'},
+  'fal-ai/ideogram/v3':{price:0.08,type:'gen',ph:'Professional fashion model wearing stylish clothes, studio background',hint:'Ideogram V3 - dobry do tekstow w obrazach.'}
 };
 
 function updateUI(){
-  document.getElementById('activePill').textContent='✦ '+activeEndpoint;
+  document.getElementById('activePill').textContent=activeEndpoint;
   var info=MI[activeEndpoint];
   var price=info?info.price:0.05;
   var type=info?info.type:activeType;
   var shots=parseInt(document.getElementById('nShots').value);
-  document.getElementById('costHint').textContent='~$'+(price*shots).toFixed(3)+' za '+shots+' zdjęcie'+(shots>1?'a':'');
+  document.getElementById('costHint').textContent='~$'+(price*shots).toFixed(3)+' za '+shots+' zdjecie';
   document.getElementById('modelCol').style.display=type==='tryon'?'block':'none';
   document.getElementById('presetWrap').style.display=type==='tryon'?'block':'none';
   document.getElementById('tryonOpts').style.display=type==='tryon'?'block':'none';
   document.getElementById('promptSec').style.display=type!=='tryon'?'block':'none';
-  if(info&&info.ph) document.getElementById('promptTxt').placeholder=info.ph;
-  if(info&&info.hint) document.getElementById('promptHint').textContent=info.hint;
+  if(info&&info.ph)document.getElementById('promptTxt').placeholder=info.ph;
+  if(info&&info.hint)document.getElementById('promptHint').textContent=info.hint;
 }
 
-// Model cards
 document.querySelectorAll('.pcard').forEach(function(card){
   card.addEventListener('click',function(){
     document.querySelectorAll('.pcard').forEach(function(c){c.classList.remove('on');});
@@ -329,7 +312,6 @@ document.querySelectorAll('.pcard').forEach(function(card){
   });
 });
 
-// Custom endpoint
 document.getElementById('customEndpoint').addEventListener('input',function(){
   var v=this.value.trim();
   if(!v)return;
@@ -341,19 +323,16 @@ document.getElementById('customEndpoint').addEventListener('input',function(){
   updateUI();
 });
 
-// API key toggle
 document.getElementById('toggleKey').addEventListener('click',function(){
   var i=document.getElementById('apiKey');
   i.type=i.type==='password'?'text':'password';
 });
 
-// Shots
 document.getElementById('nShots').addEventListener('input',function(){
   document.getElementById('nVal').textContent=this.value;
   updateUI();
 });
 
-// Chips
 document.querySelectorAll('.chip').forEach(function(c){
   c.addEventListener('click',function(){
     document.querySelectorAll('[data-g="'+c.dataset.g+'"]').forEach(function(x){x.classList.remove('on');});
@@ -362,7 +341,6 @@ document.querySelectorAll('.chip').forEach(function(c){
   });
 });
 
-// File inputs
 document.getElementById('pFile').addEventListener('change',function(){
   if(this.files&&this.files[0])loadFile(this.files[0],'p');
 });
@@ -378,7 +356,7 @@ function loadFile(file,t){
       document.getElementById('pImg').src=pUri;
       document.getElementById('pPrev').classList.add('on');
       document.getElementById('pZone').style.display='none';
-    } else {
+    }else{
       mUri=e.target.result;
       document.getElementById('mImg').src=mUri;
       document.getElementById('mPrev').classList.add('on');
@@ -389,7 +367,6 @@ function loadFile(file,t){
   r.readAsDataURL(file);
 }
 
-// Delete buttons
 document.getElementById('delP').addEventListener('click',function(){
   pUri=null;
   document.getElementById('pImg').src='';
@@ -406,7 +383,6 @@ document.getElementById('delM').addEventListener('click',function(){
   document.querySelectorAll('.pmod').forEach(function(p){p.classList.remove('on');});
 });
 
-// Preset models
 document.querySelectorAll('.pmod').forEach(function(el){
   el.addEventListener('click',function(){
     document.querySelectorAll('.pmod').forEach(function(p){p.classList.remove('on');});
@@ -418,7 +394,6 @@ document.querySelectorAll('.pmod').forEach(function(el){
   });
 });
 
-// Result grid event delegation (CSP-safe — no inline handlers)
 document.getElementById('rGrid').addEventListener('click',function(e){
   var btn=e.target.closest('.ibtn');
   if(!btn)return;
@@ -434,7 +409,7 @@ document.getElementById('rGrid').addEventListener('click',function(e){
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  } else {
+  }else{
     window.open(url,'_blank');
   }
 });
@@ -445,27 +420,35 @@ function ss(msg,type){
   el.className='status on '+(type||'info');
 }
 function sp2(pct,lbl){
-  var w=document.getElementById('progEl');
-  var f=document.getElementById('pFill');
-  var l=document.getElementById('pLbl');
+  var w=document.getElementById('progEl'),f=document.getElementById('pFill'),l=document.getElementById('pLbl');
   if(pct<0){w.classList.remove('on');return;}
-  w.classList.add('on');
-  f.style.width=pct+'%';
-  l.textContent=lbl||'';
+  w.classList.add('on');f.style.width=pct+'%';l.textContent=lbl||'';
 }
 
-function falFetch(path,method,key,body){
-  return fetch('/proxy/'+path,{
-    method:method||'GET',
+function falPost(endpoint,key,body){
+  return fetch('/proxy/submit/'+endpoint,{
+    method:'POST',
     headers:{'Authorization':'Key '+key,'Content-Type':'application/json'},
-    body:body?JSON.stringify(body):undefined
+    body:JSON.stringify(body)
   }).then(function(res){
     return res.text().then(function(text){
       if(!res.ok){
-        var msg='Błąd '+res.status;
+        var msg='Blad '+res.status;
         try{var j=JSON.parse(text);msg+=': '+(j.detail||j.message||text.substring(0,200));}catch(e){msg+=': '+text.substring(0,200);}
         throw new Error(msg);
       }
+      return JSON.parse(text);
+    });
+  });
+}
+
+function falGet(endpoint,key){
+  return fetch('/proxy/get/'+endpoint,{
+    method:'GET',
+    headers:{'Authorization':'Key '+key}
+  }).then(function(res){
+    return res.text().then(function(text){
+      if(!res.ok)throw new Error('Blad '+res.status+': '+text.substring(0,200));
       return JSON.parse(text);
     });
   });
@@ -478,9 +461,9 @@ function pollQueue(key,endpoint,reqId){
     return new Promise(function(resolve){setTimeout(resolve,2500);}).then(function(){
       attempts++;
       var elapsed=Math.round((Date.now()-start)/1000);
-      return falFetch(endpoint+'/requests/'+reqId+'/status','GET',key).then(function(d){
-        document.getElementById('qInfo').textContent='Status: '+d.status+' · '+elapsed+'s';
-        if(d.status==='COMPLETED')return falFetch(endpoint+'/requests/'+reqId,'GET',key);
+      return falGet(endpoint+'/requests/'+reqId+'/status',key).then(function(d){
+        document.getElementById('qInfo').textContent='Status: '+d.status+' - '+elapsed+'s';
+        if(d.status==='COMPLETED')return falGet(endpoint+'/requests/'+reqId,key);
         if(d.status==='FAILED')throw new Error('Generowanie nieudane.');
         if(attempts>=80)throw new Error('Timeout');
         return attempt();
@@ -495,7 +478,7 @@ function buildPayload(){
   var info=MI[activeEndpoint];
   if(!prompt&&info&&info.ph)prompt=info.ph;
   var type=info?info.type:activeType;
-  if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto',adjust_hands:true,restore_background:false,restore_clothes:false};
+  if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto'};
   if(activeEndpoint.indexOf('image-to-image')!==-1)return{image_url:pUri,prompt:prompt,strength:0.8,num_inference_steps:28};
   if(activeEndpoint.indexOf('nano-banana')!==-1||activeEndpoint.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pUri?[pUri]:[]};
   if(activeEndpoint.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pUri};
@@ -510,25 +493,13 @@ function extractImgs(res){
 
 function addCard(url){
   var card=document.createElement('div');
-  card.className='icard';
-  card.dataset.url=url;
-  var img=document.createElement('img');
-  img.src=url;
-  img.loading='lazy';
-  var ov=document.createElement('div');
-  ov.className='iov';
-  var b1=document.createElement('button');
-  b1.className='ibtn';
-  b1.dataset.action='dl';
-  b1.textContent='↓ Pobierz';
-  var b2=document.createElement('button');
-  b2.className='ibtn';
-  b2.dataset.action='open';
-  b2.textContent='Pełny';
-  ov.appendChild(b1);
-  ov.appendChild(b2);
-  card.appendChild(img);
-  card.appendChild(ov);
+  card.className='icard';card.dataset.url=url;
+  var img=document.createElement('img');img.src=url;img.loading='lazy';
+  var ov=document.createElement('div');ov.className='iov';
+  var b1=document.createElement('button');b1.className='ibtn';b1.dataset.action='dl';b1.textContent='Pobierz';
+  var b2=document.createElement('button');b2.className='ibtn';b2.dataset.action='open';b2.textContent='Pelny';
+  ov.appendChild(b1);ov.appendChild(b2);
+  card.appendChild(img);card.appendChild(ov);
   document.getElementById('rGrid').appendChild(card);
 }
 
@@ -538,8 +509,8 @@ document.getElementById('genBtn').addEventListener('click',function(){
   var info=MI[activeEndpoint];
   var type=info?info.type:activeType;
   if(!key){ss('Wpisz klucz API fal.ai','err');return;}
-  if(type==='tryon'&&!pUri){ss('Wgraj zdjęcie ubrania','err');return;}
-  if(type==='tryon'&&!mUri){ss('Wgraj zdjęcie modelki lub wybierz preset','err');return;}
+  if(type==='tryon'&&!pUri){ss('Wgraj zdjecie ubrania','err');return;}
+  if(type==='tryon'&&!mUri){ss('Wgraj zdjecie modelki lub wybierz preset','err');return;}
 
   var shots=parseInt(document.getElementById('nShots').value);
   busy=true;
@@ -548,64 +519,44 @@ document.getElementById('genBtn').addEventListener('click',function(){
   document.getElementById('rGrid').innerHTML='';
   document.getElementById('statusBar').className='status';
   document.getElementById('skelWrap').style.display='block';
-  var sg=document.getElementById('skelGrid');
-  sg.innerHTML='';
+  var sg=document.getElementById('skelGrid');sg.innerHTML='';
   for(var i=0;i<shots;i++){
-    var sk=document.createElement('div');
-    sk.className='skel';
-    var skp=document.createElement('p');
-    skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';
-    sk.appendChild(skp);
-    sg.appendChild(sk);
+    var sk=document.createElement('div');sk.className='skel';
+    var skp=document.createElement('p');skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';
+    sk.appendChild(skp);sg.appendChild(sk);
   }
-  sp2(10,'Wysyłanie...');
-  ss('Wysyłanie do '+activeEndpoint+'...','info');
+  sp2(10,'Wysylanie...');
+  ss('Wysylanie do '+activeEndpoint+'...','info');
   document.getElementById('qInfo').style.display='block';
 
-  var results=[];
-  var tot=0;
+  var results=[];var tot=0;
 
   function doShot(idx){
     if(idx>=shots){
       document.getElementById('skelWrap').style.display='none';
       document.getElementById('qInfo').style.display='none';
-      results.forEach(function(res){
-        extractImgs(res).forEach(function(url){addCard(url);tot++;});
-      });
-      document.getElementById('rCount').textContent=tot+' zdjęć';
-      sp2(-1);
-      ss('Gotowe! '+tot+' zdjęć wygenerowanych.','ok');
-      busy=false;
-      document.getElementById('genBtn').disabled=false;
+      results.forEach(function(res){extractImgs(res).forEach(function(url){addCard(url);tot++;});});
+      document.getElementById('rCount').textContent=tot+' zdiec';
+      sp2(-1);ss('Gotowe! '+tot+' zdiec wygenerowanych.','ok');
+      busy=false;document.getElementById('genBtn').disabled=false;
       return;
     }
-    sp2(15+idx*20,'Zdjęcie '+(idx+1)+'/'+shots+'...');
+    sp2(15+idx*20,'Zdjecie '+(idx+1)+'/'+shots+'...');
     var payload=buildPayload();
-    var isSync=activeEndpoint.indexOf('schnell')!==-1;
-    var p;
-    if(isSync){
-      payload.sync_mode=true;
-      p=falFetch(activeEndpoint,'POST',key,payload);
-    } else {
-      p=falFetch(activeEndpoint,'POST',key,payload).then(function(sub){
-        if(sub.request_id)return pollQueue(key,activeEndpoint,sub.request_id);
-        return sub;
-      });
-    }
-    p.then(function(result){
-      results.push(result);
-      doShot(idx+1);
+
+    falPost(activeEndpoint,key,payload).then(function(sub){
+      if(sub.request_id)return pollQueue(key,activeEndpoint,sub.request_id);
+      return sub;
+    }).then(function(result){
+      results.push(result);doShot(idx+1);
     }).catch(function(err){
       document.getElementById('skelWrap').style.display='none';
       document.getElementById('qInfo').style.display='none';
-      sp2(-1);
-      ss('Błąd: '+(err.message||'Nieznany błąd'),'err');
+      sp2(-1);ss('Blad: '+(err.message||'Nieznany blad'),'err');
       document.getElementById('emptyEl').style.display='flex';
-      busy=false;
-      document.getElementById('genBtn').disabled=false;
+      busy=false;document.getElementById('genBtn').disabled=false;
     });
   }
-
   doShot(0);
 });
 
@@ -624,22 +575,25 @@ def index():
     }
 
 
-@app.route('/proxy/<path:fal_path>', methods=['GET', 'POST', 'OPTIONS'])
-def proxy(fal_path):
-    if request.method == 'OPTIONS':
-        return '', 204, {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+@app.route('/proxy/submit/<path:endpoint>', methods=['POST'])
+def proxy_post(endpoint):
+    """Submit a new job to fal.ai queue"""
+    key = request.headers.get('Authorization', '')
+    body = request.get_data()
+    target = 'https://queue.fal.run/' + endpoint
+    req = urllib.request.Request(
+        target,
+        data=body,
+        method='POST',
+        headers={
+            'Authorization': key,
+            'Content-Type': 'application/json',
+            'User-Agent': 'AI-Model-Studio/1.0'
         }
-    target = 'https://queue.fal.run/' + fal_path
-    auth = request.headers.get('Authorization', '')
-    body = request.get_data() if request.method == 'POST' else None
-    req = urllib.request.Request(target, data=body, method=request.method,
-        headers={'Authorization': auth, 'Content-Type': 'application/json', 'User-Agent': 'AI-Model-Studio/1.0'})
+    )
     ctx = ssl.create_default_context()
     try:
-        with urllib.request.urlopen(req, context=ctx, timeout=180) as r:
+        with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
             data = r.read()
             return Response(data, status=r.status, content_type='application/json',
                 headers={'Access-Control-Allow-Origin': '*'})
@@ -648,8 +602,48 @@ def proxy(fal_path):
         return Response(data, status=e.code, content_type='application/json',
             headers={'Access-Control-Allow-Origin': '*'})
     except Exception as e:
-        return Response(json.dumps({'error': str(e)}), status=502, content_type='application/json',
+        return Response(json.dumps({'error': str(e)}), status=502,
+            content_type='application/json',
             headers={'Access-Control-Allow-Origin': '*'})
+
+
+@app.route('/proxy/get/<path:endpoint>', methods=['GET'])
+def proxy_get(endpoint):
+    """Get status or result from fal.ai queue"""
+    key = request.headers.get('Authorization', '')
+    target = 'https://queue.fal.run/' + endpoint
+    req = urllib.request.Request(
+        target,
+        method='GET',
+        headers={
+            'Authorization': key,
+            'User-Agent': 'AI-Model-Studio/1.0'
+        }
+    )
+    ctx = ssl.create_default_context()
+    try:
+        with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
+            data = r.read()
+            return Response(data, status=r.status, content_type='application/json',
+                headers={'Access-Control-Allow-Origin': '*'})
+    except urllib.error.HTTPError as e:
+        data = e.read()
+        return Response(data, status=e.code, content_type='application/json',
+            headers={'Access-Control-Allow-Origin': '*'})
+    except Exception as e:
+        return Response(json.dumps({'error': str(e)}), status=502,
+            content_type='application/json',
+            headers={'Access-Control-Allow-Origin': '*'})
+
+
+@app.route('/proxy/get/<path:endpoint>', methods=['OPTIONS'])
+@app.route('/proxy/submit/<path:endpoint>', methods=['OPTIONS'])
+def proxy_options(endpoint):
+    return '', 204, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    }
 
 
 if __name__ == '__main__':
