@@ -503,7 +503,10 @@ updateUI();
 
 @app.route('/')
 def index():
-    return HTML, 200, {'Content-Type': 'text/html; charset=utf-8'}
+    return HTML, 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Security-Policy': "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
+    }
 
 @app.route('/proxy/<path:fal_path>', methods=['GET','POST','OPTIONS'])
 def proxy(fal_path):
