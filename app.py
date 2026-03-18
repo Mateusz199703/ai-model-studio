@@ -423,10 +423,30 @@ document.querySelectorAll('.chip').forEach(function(c){
 });
 
 /* ── File readers ── */
+function resizeImage(file, maxPx){
+  return new Promise(function(resolve){
+    var url=URL.createObjectURL(file);
+    var img=new Image();
+    img.onload=function(){
+      URL.revokeObjectURL(url);
+      var w=img.naturalWidth,h=img.naturalHeight;
+      if(Math.max(w,h)<=maxPx){
+        var r=new FileReader();r.onload=function(e){resolve(e.target.result);};r.readAsDataURL(file);return;
+      }
+      var scale=maxPx/Math.max(w,h);
+      var c=document.createElement('canvas');c.width=Math.round(w*scale);c.height=Math.round(h*scale);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      resolve(c.toDataURL('image/jpeg',0.88));
+    };
+    img.onerror=function(){
+      URL.revokeObjectURL(url);
+      var r=new FileReader();r.onload=function(e){resolve(e.target.result);};r.readAsDataURL(file);
+    };
+    img.src=url;
+  });
+}
 function loadFile(file, type){
-  var r = new FileReader();
-  r.onload = function(e){ setImage(e.target.result, type); };
-  r.readAsDataURL(file);
+  resizeImage(file, 1024).then(function(uri){ setImage(uri, type); });
 }
 function setImage(uri, type){
   if(type==='garment'){
@@ -724,41 +744,42 @@ def fashn_proxy():
             'Access-Control-Allow-Headers': 'Content-Type'
         }
 
-    data = request.get_json(silent=True)
-    if not data:
-        return jsonify({'error': 'Invalid JSON'}), 400
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({'error': 'Invalid JSON'}), 400
 
-    action = data.get('action', '')
-    payload = data.get('payload', {})
-    api_key = payload.get('api_key', '')
+        action = data.get('action', '')
+        payload = data.get('payload', {})
+        api_key = payload.get('api_key', '')
 
-    if not api_key:
-        return jsonify({'error': 'Brak klucza API'}), 400
+        if not api_key:
+            return jsonify({'error': 'Brak klucza API'}), 400
 
-    if action == 'run':
-        # Submit a new prediction
-        body = {
-            'model_name': payload.get('model_name', 'tryon-v1.6'),
-            'inputs': payload.get('inputs', {})
-        }
-        status, result = fashn_request('POST', 'run', api_key, body)
+        if action == 'run':
+            body = {
+                'model_name': payload.get('model_name', 'tryon-v1.6'),
+                'inputs': payload.get('inputs', {})
+            }
+            status, result = fashn_request('POST', 'run', api_key, body)
 
-    elif action == 'status':
-        # Poll prediction status
-        pred_id = payload.get('id', '')
-        if not pred_id:
-            return jsonify({'error': 'Missing prediction id'}), 400
-        status, result = fashn_request('GET', 'status/' + pred_id, api_key)
+        elif action == 'status':
+            pred_id = payload.get('id', '')
+            if not pred_id:
+                return jsonify({'error': 'Missing prediction id'}), 400
+            status, result = fashn_request('GET', 'status/' + pred_id, api_key)
 
-    else:
-        return jsonify({'error': 'Unknown action: ' + action}), 400
+        else:
+            return jsonify({'error': 'Unknown action: ' + action}), 400
 
-    return Response(
-        json.dumps(result),
-        status=status,
-        content_type='application/json',
-        headers={'Access-Control-Allow-Origin': '*'}
-    )
+        return Response(
+            json.dumps(result),
+            status=status,
+            content_type='application/json',
+            headers={'Access-Control-Allow-Origin': '*'}
+        )
+    except Exception as e:
+        return jsonify({'error': 'Proxy error: ' + str(e)}), 500
 
 
 if __name__ == '__main__':
