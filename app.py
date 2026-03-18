@@ -8,335 +8,682 @@ HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Model Studio</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>FASHN Studio — AI Virtual Try-On</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:#0e0c0a;color:#f0ece6;min-height:100vh}
-a{color:#c9a96e;text-decoration:none}a:hover{text-decoration:underline}
-.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 26px;border-bottom:0.5px solid rgba(240,236,230,0.1);background:#0e0c0a;position:sticky;top:0;z-index:100}
-.logo{font-family:'Playfair Display',serif;font-size:18px;letter-spacing:0.04em}.logo span{color:#c9a96e}
-.online{font-size:10px;padding:3px 10px;border-radius:4px;background:rgba(29,158,117,0.15);border:0.5px solid rgba(29,158,117,0.3);color:rgba(159,225,203,0.9)}
-.layout{display:grid;grid-template-columns:460px 1fr;min-height:calc(100vh - 52px)}
-@media(max-width:900px){.layout{grid-template-columns:1fr}}
-.lpanel{border-right:0.5px solid rgba(240,236,230,0.1);padding:20px;display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 52px)}
-.rpanel{padding:20px 24px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;max-height:calc(100vh - 52px)}
-.sec{padding:12px 0;border-bottom:0.5px solid rgba(240,236,230,0.07)}
-.sec:last-of-type{border-bottom:none;padding-bottom:0}
-.stitle{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#c9a96e;font-weight:500;margin-bottom:9px}
-.flbl{font-size:10px;color:rgba(240,236,230,0.38);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
-input,select,textarea{background:rgba(240,236,230,0.06);border:0.5px solid rgba(240,236,230,0.18);border-radius:8px;padding:9px 12px;color:#f0ece6;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;width:100%;transition:border-color 0.2s}
-input:focus,select:focus,textarea:focus{border-color:rgba(201,169,110,0.65)}
-input::placeholder,textarea::placeholder{color:rgba(240,236,230,0.28)}
-select{cursor:pointer}select option{background:#1a1714}
-textarea{resize:vertical;min-height:70px;line-height:1.55}
-.row{display:flex;gap:8px;align-items:center}.row input{flex:1}
-.ib{width:36px;height:36px;flex-shrink:0;border-radius:8px;border:0.5px solid rgba(240,236,230,0.18);background:rgba(240,236,230,0.04);color:rgba(240,236,230,0.5);cursor:pointer;display:flex;align-items:center;justify-content:center}
-.ib:hover{background:rgba(240,236,230,0.1)}
-.hint{font-size:10px;color:rgba(240,236,230,0.28);margin-top:5px;line-height:1.6;font-weight:300}
-.pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:7px}
-.pc{border:0.5px solid rgba(240,236,230,0.1);border-radius:8px;padding:7px 9px;cursor:pointer;transition:all 0.18s;background:rgba(240,236,230,0.02)}
-.pc:hover{border-color:rgba(201,169,110,0.4)}.pc.on{border-color:#c9a96e;background:rgba(201,169,110,0.08)}
-.pc-name{font-size:11px;font-weight:500;color:#f0ece6;margin-bottom:1px}
-.pc-id{font-size:8px;color:rgba(240,236,230,0.3);font-family:monospace;margin-bottom:3px;word-break:break-all}
-.pc-price{font-size:9px;color:#c9a96e}
-.pc-tag{font-size:8px;padding:1px 5px;border-radius:3px;display:inline-block;margin-top:2px}
-.tt{background:rgba(29,158,117,0.15);color:rgba(159,225,203,0.9)}
-.te{background:rgba(56,138,221,0.15);color:rgba(183,212,244,0.9)}
-.tg{background:rgba(201,169,110,0.15);color:#c9a96e}
-.ucols{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.uz{border:1px dashed rgba(201,169,110,0.3);border-radius:10px;padding:13px 10px;text-align:center;cursor:pointer;transition:all 0.2s;background:rgba(201,169,110,0.02);position:relative;min-height:115px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.uz:hover{border-color:rgba(201,169,110,0.7);background:rgba(201,169,110,0.07)}
-.uz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.uz h4{font-size:11px;font-weight:500;margin:5px 0 2px}.uz p{font-size:10px;color:rgba(240,236,230,0.35);font-weight:300;line-height:1.4}
-.badge{font-size:9px;letter-spacing:0.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-bottom:4px}
-.bp{background:rgba(201,169,110,0.15);color:#c9a96e;border:0.5px solid rgba(201,169,110,0.3)}
-.bm{background:rgba(56,138,221,0.12);color:rgba(183,212,244,0.9);border:0.5px solid rgba(56,138,221,0.25)}
-.pv{display:none;position:relative;border-radius:8px;overflow:hidden;background:rgba(240,236,230,0.04);border:0.5px solid rgba(240,236,230,0.1)}
-.pv.on{display:block}.pv img{width:100%;max-height:140px;object-fit:contain;display:block}
-.db{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:4px;background:rgba(14,12,10,0.85);border:0.5px solid rgba(240,236,230,0.2);color:#f0ece6;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
-.pl{position:absolute;bottom:0;left:0;right:0;padding:4px 8px;background:rgba(14,12,10,0.75);font-size:10px;color:rgba(240,236,230,0.6)}
-.chips{display:flex;flex-wrap:wrap;gap:5px}
-.chip{font-size:11px;padding:4px 10px;border-radius:100px;border:0.5px solid rgba(240,236,230,0.16);background:transparent;color:rgba(240,236,230,0.55);cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;white-space:nowrap}
-.chip:hover{border-color:rgba(201,169,110,0.45);color:#f0ece6}.chip.on{background:rgba(201,169,110,0.13);border-color:#c9a96e;color:#c9a96e}
-.pmods{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:7px}
-.pm{border-radius:7px;cursor:pointer;border:1.5px solid transparent;transition:all 0.2s;aspect-ratio:3/4;background:rgba(240,236,230,0.05);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(240,236,230,0.35);text-align:center;position:relative;padding:4px}
-.pm.on{border-color:#c9a96e}.pm:hover{border-color:rgba(201,169,110,0.45)}
-.pm span{position:relative;z-index:1;font-size:9px;background:rgba(14,12,10,0.75);padding:2px 4px;border-radius:3px}
-.mpill{display:inline-flex;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(201,169,110,0.1);border:0.5px solid rgba(201,169,110,0.25);color:#c9a96e;margin-top:6px;word-break:break-all}
-.gb{width:100%;padding:14px;background:#c9a96e;border:none;border-radius:10px;color:#0e0c0a;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.22s;margin-top:14px}
-.gb:hover:not(:disabled){background:#dbbf87;transform:translateY(-1px)}.gb:disabled{background:rgba(201,169,110,0.18);color:rgba(14,12,10,0.4);cursor:not-allowed}
-.sb{padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.6;display:none}
-.sb.on{display:block}.sb.info{background:rgba(56,138,221,0.09);border:0.5px solid rgba(56,138,221,0.25);color:rgba(183,212,244,0.9)}
-.sb.err{background:rgba(226,75,74,0.09);border:0.5px solid rgba(226,75,74,0.25);color:rgba(240,193,193,0.9)}
-.sb.ok{background:rgba(29,158,117,0.09);border:0.5px solid rgba(29,158,117,0.25);color:rgba(159,225,203,0.9)}
-.prog{display:none;align-items:center;gap:12px;font-size:11px;color:rgba(240,236,230,0.4)}.prog.on{display:flex}
-.pb{flex:1;height:2px;background:rgba(240,236,230,0.1);border-radius:2px;overflow:hidden}
-.pf{height:100%;background:#c9a96e;border-radius:2px;transition:width 0.5s;width:0%}
-.dot{width:7px;height:7px;border-radius:50%;background:#c9a96e;flex-shrink:0;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.2}}
-.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;opacity:0.25;min-height:300px;text-align:center}
-.empty p{font-size:13px;line-height:1.8;max-width:220px;font-weight:300}
-.rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
-.ic{position:relative;border-radius:12px;overflow:hidden;background:rgba(240,236,230,0.04);border:0.5px solid rgba(240,236,230,0.1);aspect-ratio:3/4;transition:all 0.22s}
-.ic:hover{border-color:rgba(201,169,110,0.4);transform:translateY(-2px)}.ic img{width:100%;height:100%;object-fit:cover;display:block}
-.io{position:absolute;bottom:0;left:0;right:0;padding:9px;background:linear-gradient(transparent,rgba(14,12,10,0.88));display:flex;gap:5px;opacity:0;transition:opacity 0.2s}
-.ic:hover .io{opacity:1}
-.ib2{flex:1;padding:6px 4px;border-radius:6px;border:0.5px solid rgba(240,236,230,0.22);background:rgba(14,12,10,0.7);color:#f0ece6;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center}
-.ib2:hover{background:rgba(201,169,110,0.28)}
-.sk{border-radius:12px;aspect-ratio:3/4;background:rgba(240,236,230,0.05);position:relative;overflow:hidden}
-.sk::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(240,236,230,0.04),transparent);animation:shim 1.6s infinite;transform:translateX(-100%)}
-@keyframes shim{to{transform:translateX(100%)}}
-.sk p{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:10px;color:rgba(240,236,230,0.2)}
+:root{
+  --bg:#09080A;--bg1:#111013;--bg2:#161419;--bg3:#1d1b21;
+  --gold:#C9A96E;--gold2:#dbbf87;--gold-dim:rgba(201,169,110,0.15);
+  --text:#F0ECE6;--text2:rgba(240,236,230,0.55);--text3:rgba(240,236,230,0.28);
+  --border:rgba(240,236,230,0.08);--border2:rgba(240,236,230,0.14);
+  --green:rgba(29,158,117,0.9);--green-bg:rgba(29,158,117,0.1);--green-border:rgba(29,158,117,0.25);
+  --blue:rgba(100,160,240,0.9);--blue-bg:rgba(100,160,240,0.1);--blue-border:rgba(100,160,240,0.25);
+  --red:rgba(220,80,80,0.9);--red-bg:rgba(220,80,80,0.08);--red-border:rgba(220,80,80,0.25);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+
+/* ─── Header ─── */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:54px;border-bottom:0.5px solid var(--border);background:rgba(9,8,10,0.95);backdrop-filter:blur(12px);position:sticky;top:0;z-index:200}
+.logo{font-family:'Cormorant Garamond',serif;font-size:20px;letter-spacing:0.06em;font-weight:400}.logo em{color:var(--gold);font-style:normal}
+.hdr-right{display:flex;align-items:center;gap:12px}
+.badge-live{font-size:10px;padding:3px 9px;border-radius:100px;background:var(--green-bg);border:0.5px solid var(--green-border);color:var(--green);letter-spacing:0.06em}
+.hdr-link{font-size:11px;color:var(--text3);letter-spacing:0.04em}
+
+/* ─── Layout ─── */
+.layout{display:grid;grid-template-columns:400px 1fr;min-height:calc(100vh - 54px)}
+@media(max-width:860px){.layout{grid-template-columns:1fr}}
+.lpanel{border-right:0.5px solid var(--border);overflow-y:auto;max-height:calc(100vh - 54px);display:flex;flex-direction:column}
+.rpanel{overflow-y:auto;max-height:calc(100vh - 54px);padding:24px;display:flex;flex-direction:column;gap:16px}
+
+/* ─── Panel sections ─── */
+.sec{padding:18px 20px;border-bottom:0.5px solid var(--border)}
+.sec:last-child{border-bottom:none;padding-bottom:24px}
+.stitle{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:12px}
+.flbl{font-size:10px;color:var(--text3);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:6px}
+
+/* ─── Inputs ─── */
+input[type=text],input[type=password],select,textarea{
+  background:var(--bg3);border:0.5px solid var(--border2);border-radius:8px;
+  padding:9px 12px;color:var(--text);font-size:12px;font-family:'Inter',sans-serif;
+  outline:none;width:100%;transition:border-color 0.18s
+}
+input[type=text]:focus,input[type=password]:focus,select:focus,textarea:focus{border-color:rgba(201,169,110,0.5)}
+input::placeholder,textarea::placeholder{color:var(--text3)}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(240,236,230,0.3)' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+select option{background:var(--bg2)}
+textarea{resize:vertical;min-height:72px;line-height:1.6}
+.row{display:flex;gap:8px;align-items:stretch}.row input{flex:1}
+.icon-btn{width:36px;flex-shrink:0;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s}
+.icon-btn:hover{background:var(--bg2);border-color:rgba(201,169,110,0.35)}
+
+/* ─── API pill ─── */
+.api-pill{font-size:10px;padding:3px 10px;border-radius:100px;background:var(--gold-dim);border:0.5px solid rgba(201,169,110,0.25);color:var(--gold);margin-top:8px;display:inline-block;font-family:monospace;letter-spacing:0.03em}
+
+/* ─── Model selector tabs ─── */
+.model-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.mtab{padding:7px 14px;border-radius:8px;border:0.5px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;font-size:11px;font-family:'Inter',sans-serif;transition:all 0.18s;letter-spacing:0.03em}
+.mtab:hover{border-color:rgba(201,169,110,0.35);color:var(--text)}
+.mtab.on{background:var(--gold-dim);border-color:rgba(201,169,110,0.5);color:var(--gold)}
+.mtab .tag{font-size:9px;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle}
+.tag-try{background:rgba(29,158,117,0.15);color:var(--green)}
+.tag-gen{background:rgba(100,160,240,0.12);color:var(--blue)}
+
+/* ─── Image upload zones ─── */
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upload-zone{border:1px dashed rgba(201,169,110,0.25);border-radius:10px;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;position:relative;background:var(--bg2);text-align:center;padding:14px 10px}
+.upload-zone:hover{border-color:rgba(201,169,110,0.6);background:rgba(201,169,110,0.04)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-zone .uz-badge{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;padding:2px 7px;border-radius:100px;margin-bottom:7px;font-weight:500}
+.uz-badge.garment{background:var(--gold-dim);color:var(--gold);border:0.5px solid rgba(201,169,110,0.25)}
+.uz-badge.model{background:var(--blue-bg);color:var(--blue);border:0.5px solid var(--blue-border)}
+.upload-zone h4{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
+.upload-zone p{font-size:10px;color:var(--text3);font-weight:300}
+
+/* ─── Image preview ─── */
+.img-prev{display:none;position:relative;border-radius:10px;overflow:hidden;border:0.5px solid var(--border2);background:var(--bg2)}
+.img-prev.on{display:block}
+.img-prev img{width:100%;max-height:150px;object-fit:contain;display:block}
+.img-prev-label{position:absolute;bottom:0;left:0;right:0;padding:5px 8px;background:rgba(9,8,10,0.8);font-size:10px;color:var(--text2)}
+.img-del{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:5px;background:rgba(9,8,10,0.85);border:0.5px solid var(--border2);color:var(--text);cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.img-del:hover{background:rgba(220,80,80,0.25);border-color:var(--red-border)}
+
+/* ─── Preset models ─── */
+.preset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.preset-item{border-radius:8px;aspect-ratio:3/4;border:1.5px solid transparent;cursor:pointer;overflow:hidden;background:var(--bg3);transition:all 0.2s;position:relative}
+.preset-item img{width:100%;height:100%;object-fit:cover;display:block;opacity:0.7;transition:opacity 0.2s}
+.preset-item:hover img,.preset-item.on img{opacity:1}
+.preset-item.on{border-color:var(--gold)}
+.preset-item:hover{border-color:rgba(201,169,110,0.45)}
+.preset-item .plabel{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-size:8px;color:rgba(240,236,230,0.5);background:rgba(9,8,10,0.6);padding:2px}
+
+/* ─── Options chips ─── */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:11px;padding:5px 12px;border-radius:100px;border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.18s;font-family:'Inter',sans-serif}
+.chip:hover{border-color:rgba(201,169,110,0.4);color:var(--text)}
+.chip.on{background:var(--gold-dim);border-color:rgba(201,169,110,0.5);color:var(--gold)}
+
+/* ─── Number input ─── */
+.num-row{display:flex;align-items:center;gap:12px}
+.num-row input[type=range]{flex:1;-webkit-appearance:none;height:2px;background:var(--bg3);border:none;border-radius:2px;outline:none;padding:0;accent-color:var(--gold)}
+.num-val{font-size:14px;color:var(--gold);min-width:24px;text-align:right;font-weight:500}
+
+/* ─── Generate button ─── */
+.gen-btn{width:100%;padding:15px;background:var(--gold);border:none;border-radius:10px;color:#0e0c0a;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.22s;margin-top:6px}
+.gen-btn:hover:not(:disabled){background:var(--gold2);transform:translateY(-1px)}
+.gen-btn:disabled{background:rgba(201,169,110,0.15);color:rgba(14,12,10,0.35);cursor:not-allowed}
+
+/* ─── Status bar ─── */
+.sbar{padding:11px 14px;border-radius:9px;font-size:12px;line-height:1.6;display:none}
+.sbar.on{display:block}
+.sbar.info{background:var(--blue-bg);border:0.5px solid var(--blue-border);color:var(--blue)}
+.sbar.err{background:var(--red-bg);border:0.5px solid var(--red-border);color:var(--red)}
+.sbar.ok{background:var(--green-bg);border:0.5px solid var(--green-border);color:var(--green)}
+
+/* ─── Progress ─── */
+.progress-wrap{display:none;align-items:center;gap:12px;font-size:11px;color:var(--text3)}
+.progress-wrap.on{display:flex}
+.progress-bar{flex:1;height:1.5px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.6s}
+.pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.7)}}
+.status-txt{font-size:10px;color:var(--text3);text-align:center;padding:2px 0}
+
+/* ─── Results ─── */
+.results-header{display:flex;align-items:center;justify-content:space-between}
+.results-label{font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.results-count{font-size:11px;color:var(--text3)}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.result-card{position:relative;border-radius:12px;overflow:hidden;background:var(--bg2);border:0.5px solid var(--border);aspect-ratio:3/4;transition:all 0.22s}
+.result-card:hover{border-color:rgba(201,169,110,0.35);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,0.5)}
+.result-card img{width:100%;height:100%;object-fit:cover;display:block}
+.result-overlay{position:absolute;bottom:0;left:0;right:0;padding:12px 10px;background:linear-gradient(transparent,rgba(9,8,10,0.9));display:flex;gap:6px;opacity:0;transition:opacity 0.2s}
+.result-card:hover .result-overlay{opacity:1}
+.result-btn{flex:1;padding:7px 5px;border-radius:7px;border:0.5px solid rgba(240,236,230,0.2);background:rgba(9,8,10,0.7);color:var(--text);font-size:11px;cursor:pointer;font-family:'Inter',sans-serif;text-align:center;transition:all 0.15s}
+.result-btn:hover{background:rgba(201,169,110,0.25);border-color:rgba(201,169,110,0.4)}
+
+/* ─── Skeletons ─── */
+.skeleton{border-radius:12px;aspect-ratio:3/4;background:var(--bg2);position:relative;overflow:hidden;border:0.5px solid var(--border)}
+.skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(240,236,230,0.03),transparent);animation:shimmer 1.8s infinite;transform:translateX(-100%)}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.skeleton p{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:10px;color:var(--text3)}
+
+/* ─── Empty state ─── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;opacity:0.2;min-height:360px;text-align:center}
+.empty svg{opacity:0.7}
+.empty h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:0.04em}
+.empty p{font-size:12px;line-height:1.9;max-width:240px;font-weight:300}
+
+/* ─── Hint ─── */
+.hint{font-size:10px;color:var(--text3);margin-top:5px;line-height:1.6;font-weight:300}
+
+/* ─── Cost hint ─── */
+.cost-hint{font-size:10px;color:rgba(201,169,110,0.6);margin-top:5px}
 </style>
 </head>
 <body>
 <div class="hdr">
-  <div class="logo">AI MODEL <span>STUDIO</span></div>
-  <div style="font-size:11px;color:rgba(240,236,230,0.3)">fal.ai</div>
-  <div class="online">online</div>
+  <div class="logo">FASHN <em>STUDIO</em></div>
+  <div class="hdr-right">
+    <div class="hdr-link">fashn.ai API</div>
+    <div class="badge-live">LIVE</div>
+  </div>
 </div>
+
 <div class="layout">
+<!-- ══════════ LEFT PANEL ══════════ -->
 <div class="lpanel">
+
+  <!-- API KEY -->
   <div class="sec">
-    <div class="stitle">Klucz API fal.ai</div>
+    <div class="stitle">Klucz API FASHN.ai</div>
     <div class="row">
-      <input type="password" id="apiKey" placeholder="fal_xxxxxxxxxxxxxxxxxxxxxxxx">
-      <button class="ib" id="toggleKey">
+      <input type="password" id="apiKey" placeholder="fa-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+      <button class="icon-btn" id="toggleKey" title="Pokaż/ukryj">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
     </div>
-    <div class="hint"><a href="https://fal.ai/dashboard/keys" target="_blank">fal.ai/dashboard/keys</a> | <a href="https://fal.ai/dashboard/billing" target="_blank">doladowanie</a></div>
+    <div class="hint">Utwórz klucz na <a href="https://fashn.ai/dashboard/api-keys" target="_blank">fashn.ai/dashboard</a></div>
+    <div class="api-pill" id="endpointPill">api.fashn.ai/v1</div>
   </div>
+
+  <!-- MODEL SELECTION -->
   <div class="sec">
     <div class="stitle">Model AI</div>
-    <div class="pgrid" id="pgrid">
-      <div class="pc on" data-ep="fal-ai/fashn/tryon/v1.6" data-t="tryon" data-base="fal-ai/fashn/tryon"><div class="pc-name">FASHN Try-On</div><div class="pc-id">fal-ai/fashn/tryon/v1.6</div><div class="pc-price">$0.075</div><div class="pc-tag tt">try-on</div></div>
-      <div class="pc" data-ep="fal-ai/nano-banana-2/edit" data-t="edit" data-base="fal-ai/nano-banana-2"><div class="pc-name">Nano Banana 2</div><div class="pc-id">fal-ai/nano-banana-2/edit</div><div class="pc-price">$0.039</div><div class="pc-tag te">Gemini 3.1</div></div>
-      <div class="pc" data-ep="fal-ai/gemini-3-pro-image-preview" data-t="edit" data-base="fal-ai/gemini-3-pro-image-preview"><div class="pc-name">Nano Banana Pro</div><div class="pc-id">fal-ai/gemini-3-pro-image-preview</div><div class="pc-price">$0.15</div><div class="pc-tag te">Gemini 3 Pro</div></div>
-      <div class="pc" data-ep="fal-ai/flux-2/edit" data-t="edit" data-base="fal-ai/flux-2"><div class="pc-name">FLUX.2 Edit</div><div class="pc-id">fal-ai/flux-2/edit</div><div class="pc-price">$0.05</div><div class="pc-tag te">img edit</div></div>
-      <div class="pc" data-ep="fal-ai/flux/dev/image-to-image" data-t="edit" data-base="fal-ai/flux"><div class="pc-name">FLUX img2img</div><div class="pc-id">fal-ai/flux/dev/image-to-image</div><div class="pc-price">$0.025</div><div class="pc-tag te">img2img</div></div>
-      <div class="pc" data-ep="fal-ai/flux/dev" data-t="gen" data-base="fal-ai/flux"><div class="pc-name">FLUX Dev</div><div class="pc-id">fal-ai/flux/dev</div><div class="pc-price">$0.025</div><div class="pc-tag tg">text2img</div></div>
-      <div class="pc" data-ep="fal-ai/flux/schnell" data-t="gen" data-base="fal-ai/flux"><div class="pc-name">FLUX Schnell</div><div class="pc-id">fal-ai/flux/schnell</div><div class="pc-price">$0.003</div><div class="pc-tag tg">szybki</div></div>
-      <div class="pc" data-ep="fal-ai/recraft-v3" data-t="gen" data-base="fal-ai/recraft-v3"><div class="pc-name">Recraft V3</div><div class="pc-id">fal-ai/recraft-v3</div><div class="pc-price">$0.04</div><div class="pc-tag tg">foto</div></div>
-      <div class="pc" data-ep="fal-ai/ideogram/v3" data-t="gen" data-base="fal-ai/ideogram"><div class="pc-name">Ideogram V3</div><div class="pc-id">fal-ai/ideogram/v3</div><div class="pc-price">$0.08</div><div class="pc-tag tg">tekst</div></div>
+    <div class="model-tabs">
+      <div class="mtab on" data-m="tryon-v1.6" data-t="tryon">Try-On v1.6 <span class="tag tag-try">try-on</span></div>
+      <div class="mtab" data-m="product-to-model" data-t="product">Produkt→Model <span class="tag tag-gen">gen</span></div>
+      <div class="mtab" data-m="background-remove" data-t="bg">Usuń tło <span class="tag tag-gen">bg</span></div>
     </div>
-    <div style="margin-top:10px">
-      <div class="flbl">Lub wpisz wlasny endpoint</div>
-      <div class="row">
-        <input type="text" id="customEp" placeholder="np. fal-ai/flux-pro/v1.1-ultra" style="font-family:monospace;font-size:11px">
-        <a href="https://fal.ai/explore/models" target="_blank"><button class="ib"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></a>
-      </div>
-    </div>
-    <div class="mpill" id="mpill">fal-ai/fashn/tryon/v1.6</div>
+    <div class="hint" id="modelHint">Wirtualna przymierzalnia — nałóż ubranie na model. ~$0.075/zdjęcie</div>
   </div>
+
+  <!-- UPLOAD IMAGES -->
   <div class="sec" id="uploadSec">
-    <div class="stitle">Zdjecia wejsciowe</div>
-    <div class="ucols">
+    <div class="stitle">Zdjęcia wejściowe</div>
+    <div class="upload-grid">
+      <!-- GARMENT -->
       <div>
-        <div class="uz" id="pZone"><input type="file" id="pFile" accept="image/jpeg,image/png,image/webp"><div class="badge bp">Produkt</div><svg width="20" height="20" viewBox="0 0 32 32" fill="none" opacity="0.5"><rect x="4" y="6" width="24" height="22" rx="3" stroke="#c9a96e" stroke-width="1.2"/><rect x="9" y="12" width="14" height="10" rx="2" stroke="#c9a96e" stroke-width="1"/></svg><h4>Ubranie</h4><p>Wieszak / flat-lay</p></div>
-        <div class="pv" id="pPrev"><img id="pImg" src="" alt=""><div class="pl">Produkt</div><button class="db" id="delP">x</button></div>
+        <div class="upload-zone" id="garmentZone">
+          <input type="file" id="garmentFile" accept="image/jpeg,image/png,image/webp">
+          <div class="uz-badge garment">Ubranie</div>
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" opacity="0.45" style="margin-bottom:6px">
+            <path d="M10 6L6 12h4v14h12V12h4l-4-6" stroke="#C9A96E" stroke-width="1.2" stroke-linejoin="round"/>
+            <path d="M10 6c0 2 6 4 6 4s6-2 6-4" stroke="#C9A96E" stroke-width="1.2"/>
+          </svg>
+          <h4>Wgraj ubranie</h4>
+          <p>Flat-lay / na modelu / manekin</p>
+        </div>
+        <div class="img-prev" id="garmentPrev">
+          <img id="garmentImg" src="" alt="">
+          <div class="img-prev-label">Ubranie</div>
+          <button class="img-del" id="delGarment">✕</button>
+        </div>
       </div>
-      <div id="modelCol">
-        <div class="uz" id="mZone"><input type="file" id="mFile" accept="image/jpeg,image/png,image/webp"><div class="badge bm">Modelka</div><svg width="20" height="20" viewBox="0 0 32 32" fill="none" opacity="0.5"><circle cx="16" cy="10" r="5" stroke="#378add" stroke-width="1.2"/><path d="M6 28c0-5.52 4.48-10 10-10s10 4.48 10 10" stroke="#378add" stroke-width="1.2" stroke-linecap="round"/></svg><h4>Modelka</h4><p>Pelna sylwetka</p></div>
-        <div class="pv" id="mPrev"><img id="mImg" src="" alt=""><div class="pl">Modelka</div><button class="db" id="delM">x</button></div>
+      <!-- MODEL (for tryon) -->
+      <div id="modelUploadCol">
+        <div class="upload-zone" id="modelZone">
+          <input type="file" id="modelFile" accept="image/jpeg,image/png,image/webp">
+          <div class="uz-badge model">Modelka</div>
+          <svg width="22" height="22" viewBox="0 0 32 32" fill="none" opacity="0.45" style="margin-bottom:6px">
+            <circle cx="16" cy="10" r="5" stroke="#64A0F0" stroke-width="1.2"/>
+            <path d="M6 29c0-5.52 4.48-10 10-10s10 4.48 10 10" stroke="#64A0F0" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <h4>Wgraj modelkę</h4>
+          <p>Pełna sylwetka</p>
+        </div>
+        <div class="img-prev" id="modelPrev">
+          <img id="modelImg" src="" alt="">
+          <div class="img-prev-label">Modelka</div>
+          <button class="img-del" id="delModel">✕</button>
+        </div>
       </div>
     </div>
-    <div id="presetWrap" style="margin-top:8px">
-      <div class="flbl">Gotowe modelki</div>
-      <div class="pmods">
-        <div class="pm" data-url="https://storage.googleapis.com/falserverless/model_tests/leffa/person_image.jpg"><span>M1</span></div>
-        <div class="pm" data-url="https://images.unsplash.com/photo-1529139574466-a303027f1d1f?w=400&q=80"><span>M2</span></div>
-        <div class="pm" data-url="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80"><span>M3</span></div>
-        <div class="pm" data-url="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80"><span>M4</span></div>
+
+    <!-- PRESET MODELS -->
+    <div id="presetSection" style="margin-top:12px">
+      <div class="flbl">Przykładowe modelki</div>
+      <div class="preset-grid" id="presetGrid">
+        <div class="preset-item" data-url="https://storage.googleapis.com/falserverless/model_tests/leffa/person_image.jpg">
+          <img src="https://storage.googleapis.com/falserverless/model_tests/leffa/person_image.jpg" alt="" loading="lazy">
+          <div class="plabel">M1</div>
+        </div>
+        <div class="preset-item" data-url="https://images.unsplash.com/photo-1529139574466-a303027f1d1f?w=400&q=80">
+          <img src="https://images.unsplash.com/photo-1529139574466-a303027f1d1f?w=400&q=80" alt="" loading="lazy">
+          <div class="plabel">M2</div>
+        </div>
+        <div class="preset-item" data-url="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80" alt="" loading="lazy">
+          <div class="plabel">M3</div>
+        </div>
+        <div class="preset-item" data-url="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&q=80" alt="" loading="lazy">
+          <div class="plabel">M4</div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="sec" id="tryonOpts">
-    <div class="stitle">Opcje try-on</div>
-    <div style="margin-bottom:9px"><div class="flbl">Typ ubrania</div>
+
+  <!-- TRY-ON OPTIONS -->
+  <div class="sec" id="tryonOptions">
+    <div class="stitle">Parametry try-on</div>
+    <div style="margin-bottom:14px">
+      <div class="flbl">Kategoria ubrania</div>
       <div class="chips">
-        <div class="chip on" data-g="cat" data-v="tops">Gora</div>
-        <div class="chip" data-g="cat" data-v="bottoms">Dol</div>
+        <div class="chip on" data-g="cat" data-v="auto">Auto</div>
+        <div class="chip" data-g="cat" data-v="tops">Góra</div>
+        <div class="chip" data-g="cat" data-v="bottoms">Dół</div>
         <div class="chip" data-g="cat" data-v="one-pieces">Sukienka</div>
       </div>
     </div>
-    <div><div class="flbl">Tryb</div>
+    <div style="margin-bottom:14px">
+      <div class="flbl">Tryb generowania</div>
       <div class="chips">
         <div class="chip on" data-g="mode" data-v="balanced">Balans</div>
         <div class="chip" data-g="mode" data-v="performance">Szybki</div>
-        <div class="chip" data-g="mode" data-v="quality">Jakosc</div>
+        <div class="chip" data-g="mode" data-v="quality">Jakość HD</div>
+      </div>
+    </div>
+    <div>
+      <div class="flbl">Typ zdjęcia ubrania</div>
+      <div class="chips">
+        <div class="chip on" data-g="gtype" data-v="auto">Auto-detect</div>
+        <div class="chip" data-g="gtype" data-v="flat-lay">Flat-lay</div>
+        <div class="chip" data-g="gtype" data-v="model">Na modelu</div>
       </div>
     </div>
   </div>
-  <div class="sec" id="promptSec" style="display:none">
-    <div class="stitle">Prompt</div>
-    <textarea id="promptTxt" placeholder="Opisz co chcesz wygenerowac..."></textarea>
-    <div class="hint" id="promptHint"></div>
-  </div>
-  <div class="sec">
-    <div class="stitle">Liczba zdiec</div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <input type="range" min="1" max="4" value="1" step="1" id="nShots" style="flex:1;-webkit-appearance:none;height:2px;background:rgba(240,236,230,0.15);border-radius:2px;outline:none;padding:0;accent-color:#c9a96e">
-      <span style="font-size:13px;color:#c9a96e;min-width:20px;text-align:right" id="nVal">1</span>
+
+  <!-- PRODUCT-TO-MODEL OPTIONS -->
+  <div class="sec" id="prodOptions" style="display:none">
+    <div class="stitle">Parametry Product→Model</div>
+    <div style="margin-bottom:12px">
+      <div class="flbl">Opis sceny (opcjonalnie)</div>
+      <textarea id="prodPrompt" placeholder="np. professional fashion model, white studio, editorial photography"></textarea>
     </div>
-    <div class="hint" id="costHint">~$0.075 za 1 zdjecie</div>
+    <div>
+      <div class="flbl">Tryb</div>
+      <div class="chips">
+        <div class="chip on" data-g="pmode" data-v="balanced">Balans</div>
+        <div class="chip" data-g="pmode" data-v="performance">Szybki</div>
+        <div class="chip" data-g="pmode" data-v="quality">Jakość</div>
+      </div>
+    </div>
   </div>
-  <button class="gb" id="genBtn">Generuj zdjecia</button>
-</div>
+
+  <!-- SHOTS -->
+  <div class="sec">
+    <div class="stitle">Liczba zdjęć</div>
+    <div class="num-row">
+      <input type="range" min="1" max="4" value="1" step="1" id="nShots">
+      <span class="num-val" id="nVal">1</span>
+    </div>
+    <div class="cost-hint" id="costHint">~$0.075 za 1 zdjęcie</div>
+  </div>
+
+  <!-- GENERATE BUTTON -->
+  <div class="sec">
+    <button class="gen-btn" id="genBtn">Generuj</button>
+  </div>
+
+</div><!-- /lpanel -->
+
+<!-- ══════════ RIGHT PANEL ══════════ -->
 <div class="rpanel">
-  <div style="display:flex;align-items:center;justify-content:space-between">
-    <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#c9a96e;font-weight:500">Wyniki</div>
-    <div style="font-size:11px;color:rgba(240,236,230,0.3)" id="rCount"></div>
+  <div class="results-header">
+    <div class="results-label">Wyniki</div>
+    <div class="results-count" id="rCount"></div>
   </div>
-  <div class="sb" id="sb"></div>
-  <div class="prog" id="prog"><div class="dot"></div><div class="pb"><div class="pf" id="pf"></div></div><div id="pl" style="min-width:150px;text-align:right;font-size:11px"></div></div>
-  <div id="qi" style="font-size:11px;color:rgba(240,236,230,0.3);text-align:center;display:none;padding:4px 0"></div>
-  <div class="empty" id="emptyEl"><svg width="50" height="50" viewBox="0 0 50 50" fill="none"><rect x="5" y="7" width="20" height="36" rx="4" stroke="currentColor" stroke-width="1.2"/><circle cx="36" cy="26" r="10" stroke="currentColor" stroke-width="1.2"/></svg><p>Wybierz model i kliknij Generuj</p></div>
-  <div id="skelWrap" style="display:none"><div class="rg" id="skelGrid"></div></div>
-  <div class="rg" id="rGrid"></div>
+  <div class="sbar" id="sbar"></div>
+  <div class="progress-wrap" id="progWrap">
+    <div class="pulse-dot"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+    <div style="min-width:130px;text-align:right;font-size:11px" id="progLabel"></div>
+  </div>
+  <div class="status-txt" id="statusTxt"></div>
+  <div class="empty" id="emptyEl">
+    <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+      <rect x="8" y="6" width="22" height="48" rx="5" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M8 14h22M8 46h22" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+      <circle cx="44" cy="34" r="12" stroke="currentColor" stroke-width="1.2"/>
+      <path d="M44 30v4l3 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    </svg>
+    <h3>FASHN Studio</h3>
+    <p>Wybierz model, wgraj zdjęcia i kliknij Generuj</p>
+  </div>
+  <div id="skelWrap" style="display:none"><div class="results-grid" id="skelGrid"></div></div>
+  <div class="results-grid" id="rGrid"></div>
 </div>
 </div>
+
 <script>
 (function(){
 'use strict';
-var S={cat:'tops',mode:'balanced'};
-var pUri=null,mUri=null,busy=false;
-var ep='fal-ai/fashn/tryon/v1.6',et='tryon',eb='fal-ai/fashn/tryon';
-var MI={
-  'fal-ai/fashn/tryon/v1.6':{p:0.075,t:'tryon',ph:'',h:'Wgraj ubranie i modelke. FASHN zachowuje kolory i wzory.'},
-  'fal-ai/nano-banana-2/edit':{p:0.039,t:'edit',ph:'Put this clothing on a professional fashion model, white studio background, full body, photorealistic',h:'Gemini 3.1 - edytuje zdjecie wg opisu.'},
-  'fal-ai/gemini-3-pro-image-preview':{p:0.15,t:'edit',ph:'Luxury fashion editorial, elegant model, dramatic lighting, Vogue style',h:'Gemini 3 Pro - najwyzsza jakosc.'},
-  'fal-ai/flux-2/edit':{p:0.05,t:'edit',ph:'Professional fashion model wearing this clothing, white studio background, full body',h:'FLUX.2 Edit.'},
-  'fal-ai/flux/dev/image-to-image':{p:0.025,t:'edit',ph:'Fashion model wearing this clothing, white studio, professional photography',h:'FLUX Dev img2img.'},
-  'fal-ai/flux/dev':{p:0.025,t:'gen',ph:'Professional fashion model, white studio background, full body, 8K',h:'FLUX Dev - z opisu tekstowego.'},
-  'fal-ai/flux/schnell':{p:0.003,t:'gen',ph:'Fashion model, elegant outfit, white background, professional photo',h:'FLUX Schnell - szybki ~3 sek.'},
-  'fal-ai/recraft-v3':{p:0.04,t:'gen',ph:'Fashion model in stylish clothing, studio background, editorial photography',h:'Recraft V3.'},
-  'fal-ai/ideogram/v3':{p:0.08,t:'gen',ph:'Fashion model wearing stylish clothes, studio background',h:'Ideogram V3.'}
+
+/* ── State ── */
+var S = {cat:'auto', mode:'balanced', gtype:'auto', pmode:'balanced'};
+var garmentUri=null, modelUri=null, busy=false;
+var currentModel='tryon-v1.6', currentType='tryon';
+
+var FASHN_API = '/fashn';
+var MODELS = {
+  'tryon-v1.6':     {price:0.075, type:'tryon',   hint:'Virtual try-on v1.6 — idealne kolory i wzory. ~$0.075/zdjęcie'},
+  'product-to-model':{price:0.10,  type:'product', hint:'Przekształca zdjęcie produktu w zdjęcie na modelu. ~$0.10/zdjęcie'},
+  'background-remove':{price:0.02, type:'bg',      hint:'Usuwa tło ze zdjęcia produktu. ~$0.02/zdjęcie'}
 };
-function ui(){
-  document.getElementById('mpill').textContent=ep;
-  var info=MI[ep],price=info?info.p:0.05,type=info?info.t:et;
-  var shots=parseInt(document.getElementById('nShots').value);
-  document.getElementById('costHint').textContent='~$'+(price*shots).toFixed(3)+' za '+shots+' zdjecie';
-  document.getElementById('modelCol').style.display=type==='tryon'?'block':'none';
-  document.getElementById('presetWrap').style.display=type==='tryon'?'block':'none';
-  document.getElementById('tryonOpts').style.display=type==='tryon'?'block':'none';
-  document.getElementById('promptSec').style.display=type!=='tryon'?'block':'none';
-  if(info&&info.ph)document.getElementById('promptTxt').placeholder=info.ph;
-  if(info&&info.h)document.getElementById('promptHint').textContent=info.h;
+
+/* ── UI update ── */
+function updateUI(){
+  var info = MODELS[currentModel] || {price:0.075, type:'tryon'};
+  var shots = parseInt(document.getElementById('nShots').value);
+  document.getElementById('costHint').textContent = '~$'+(info.price*shots).toFixed(3)+' za '+shots+' zdjęcie';
+  document.getElementById('modelHint').textContent = info.hint;
+  // show/hide sections
+  var isTryon = currentType==='tryon';
+  var isProd = currentType==='product';
+  document.getElementById('modelUploadCol').style.display = isTryon?'':'none';
+  document.getElementById('presetSection').style.display = isTryon?'':'none';
+  document.getElementById('tryonOptions').style.display = isTryon?'':'none';
+  document.getElementById('prodOptions').style.display = isProd?'':'none';
+  // bg-remove: only garment upload needed
+  var garmentLabel = currentType==='bg'?'Zdjęcie produktu':'Ubranie';
+  document.querySelector('#garmentZone h4').textContent = 'Wgraj '+(currentType==='bg'?'zdjęcie':'ubranie');
 }
-document.querySelectorAll('.pc').forEach(function(c){
-  c.addEventListener('click',function(){
-    document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});
-    c.classList.add('on');ep=c.dataset.ep;et=c.dataset.t;eb=c.dataset.base||c.dataset.ep;
-    document.getElementById('customEp').value='';ui();
+
+/* ── Model tabs ── */
+document.querySelectorAll('.mtab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.mtab').forEach(function(t){t.classList.remove('on');});
+    tab.classList.add('on');
+    currentModel = tab.dataset.m;
+    currentType = tab.dataset.t;
+    updateUI();
   });
 });
-document.getElementById('customEp').addEventListener('input',function(){
-  var v=this.value.trim();if(!v)return;
-  document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});
-  ep=v;eb=v;
-  et=v.indexOf('tryon')!==-1?'tryon':v.indexOf('edit')!==-1||v.indexOf('nano-banana')!==-1||v.indexOf('gemini')!==-1||v.indexOf('image-to-image')!==-1?'edit':'gen';
-  ui();
+
+/* ── Toggle key visibility ── */
+document.getElementById('toggleKey').addEventListener('click', function(){
+  var inp = document.getElementById('apiKey');
+  inp.type = inp.type==='password'?'text':'password';
 });
-document.getElementById('toggleKey').addEventListener('click',function(){var i=document.getElementById('apiKey');i.type=i.type==='password'?'text':'password';});
-document.getElementById('nShots').addEventListener('input',function(){document.getElementById('nVal').textContent=this.value;ui();});
-document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('[data-g="'+c.dataset.g+'"]').forEach(function(x){x.classList.remove('on');});c.classList.add('on');S[c.dataset.g]=c.dataset.v;});});
-document.getElementById('pFile').addEventListener('change',function(){if(this.files&&this.files[0])lf(this.files[0],'p');});
-document.getElementById('mFile').addEventListener('change',function(){if(this.files&&this.files[0])lf(this.files[0],'m');});
-function lf(file,t){var r=new FileReader();r.onload=function(e){if(t==='p'){pUri=e.target.result;document.getElementById('pImg').src=pUri;document.getElementById('pPrev').classList.add('on');document.getElementById('pZone').style.display='none';}else{mUri=e.target.result;document.getElementById('mImg').src=mUri;document.getElementById('mPrev').classList.add('on');document.getElementById('mZone').style.display='none';document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});}};r.readAsDataURL(file);}
-document.getElementById('delP').addEventListener('click',function(){pUri=null;document.getElementById('pImg').src='';document.getElementById('pPrev').classList.remove('on');document.getElementById('pZone').style.display='';document.getElementById('pFile').value='';});
-document.getElementById('delM').addEventListener('click',function(){mUri=null;document.getElementById('mImg').src='';document.getElementById('mPrev').classList.remove('on');document.getElementById('mZone').style.display='';document.getElementById('mFile').value='';document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});});
-document.querySelectorAll('.pm').forEach(function(el){el.addEventListener('click',function(){document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});el.classList.add('on');mUri=el.dataset.url;document.getElementById('mImg').src=mUri;document.getElementById('mPrev').classList.add('on');document.getElementById('mZone').style.display='none';});});
-document.getElementById('rGrid').addEventListener('click',function(e){var btn=e.target.closest('.ib2');if(!btn)return;var card=btn.closest('.ic');if(!card)return;var url=card.dataset.url;if(!url)return;if(btn.dataset.a==='dl'){var a=document.createElement('a');a.href=url;a.download='zdjecie.jpg';a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);}else{window.open(url,'_blank');}});
-function ss(msg,type){var el=document.getElementById('sb');el.textContent=msg;el.className='sb on '+(type||'info');}
-function sp(pct,lbl){var w=document.getElementById('prog'),f=document.getElementById('pf'),l=document.getElementById('pl');if(pct<0){w.classList.remove('on');return;}w.classList.add('on');f.style.width=pct+'%';l.textContent=lbl||'';}
-var FAL_Q='https://queue.fal.run/';
-var FAL_ST='https://storage.fal.ai/upload';
-function falFetch(url,opts){return fetch(url,opts).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||j.detail||j.message||('HTTP '+res.status));return j;});});}
-function uploadImg(dataUri,key){
-  if(!dataUri||!dataUri.startsWith('data:'))return Promise.resolve(dataUri);
-  var parts=dataUri.split(',');var mime=parts[0].split(':')[1].split(';')[0];
-  var bin=atob(parts[1]);var arr=new Uint8Array(bin.length);
-  for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
-  var blob=new Blob([arr],{type:mime});
-  return falFetch(FAL_ST,{method:'POST',headers:{'Authorization':'Key '+key,'Content-Type':mime},body:blob}).then(function(j){if(!j.url)throw new Error('Brak URL z uploadu');return j.url;});
+
+/* ── Shots slider ── */
+document.getElementById('nShots').addEventListener('input', function(){
+  document.getElementById('nVal').textContent = this.value;
+  updateUI();
+});
+
+/* ── Chips ── */
+document.querySelectorAll('.chip').forEach(function(c){
+  c.addEventListener('click', function(){
+    document.querySelectorAll('[data-g="'+c.dataset.g+'"]').forEach(function(x){x.classList.remove('on');});
+    c.classList.add('on');
+    S[c.dataset.g] = c.dataset.v;
+  });
+});
+
+/* ── File readers ── */
+function loadFile(file, type){
+  var r = new FileReader();
+  r.onload = function(e){ setImage(e.target.result, type); };
+  r.readAsDataURL(file);
 }
-function falSubmit(key,endpoint,payload){return falFetch(FAL_Q+endpoint,{method:'POST',headers:{'Authorization':'Key '+key,'Content-Type':'application/json'},body:JSON.stringify(payload)});}
-function falStatus(key,baseEp,reqId){return falFetch(FAL_Q+baseEp+'/requests/'+reqId+'/status',{method:'GET',headers:{'Authorization':'Key '+key}});}
-function falResult(key,baseEp,reqId){return falFetch(FAL_Q+baseEp+'/requests/'+reqId,{method:'GET',headers:{'Authorization':'Key '+key}});}
-function poll(key,reqId,baseEp){
-  var start=Date.now(),attempts=0;
-  function attempt(){return new Promise(function(r){setTimeout(r,2500);}).then(function(){
-    attempts++;var e=Math.round((Date.now()-start)/1000);
-    return falStatus(key,baseEp,reqId).then(function(d){
-      document.getElementById('qi').textContent='Status: '+d.status+' - '+e+'s';
-      if(d.status==='COMPLETED')return falResult(key,baseEp,reqId);
-      if(d.status==='FAILED')throw new Error('Generowanie nieudane.');
-      if(attempts>=80)throw new Error('Timeout');
-      return attempt();
+function setImage(uri, type){
+  if(type==='garment'){
+    garmentUri=uri;
+    document.getElementById('garmentImg').src=uri;
+    document.getElementById('garmentPrev').classList.add('on');
+    document.getElementById('garmentZone').style.display='none';
+  } else {
+    modelUri=uri;
+    document.getElementById('modelImg').src=uri;
+    document.getElementById('modelPrev').classList.add('on');
+    document.getElementById('modelZone').style.display='none';
+    document.querySelectorAll('.preset-item').forEach(function(p){p.classList.remove('on');});
+  }
+}
+document.getElementById('garmentFile').addEventListener('change', function(){
+  if(this.files&&this.files[0]) loadFile(this.files[0],'garment');
+});
+document.getElementById('modelFile').addEventListener('change', function(){
+  if(this.files&&this.files[0]) loadFile(this.files[0],'model');
+});
+
+/* ── Delete images ── */
+document.getElementById('delGarment').addEventListener('click', function(){
+  garmentUri=null;
+  document.getElementById('garmentImg').src='';
+  document.getElementById('garmentPrev').classList.remove('on');
+  document.getElementById('garmentZone').style.display='';
+  document.getElementById('garmentFile').value='';
+});
+document.getElementById('delModel').addEventListener('click', function(){
+  modelUri=null;
+  document.getElementById('modelImg').src='';
+  document.getElementById('modelPrev').classList.remove('on');
+  document.getElementById('modelZone').style.display='';
+  document.getElementById('modelFile').value='';
+  document.querySelectorAll('.preset-item').forEach(function(p){p.classList.remove('on');});
+});
+
+/* ── Presets ── */
+document.querySelectorAll('.preset-item').forEach(function(el){
+  el.addEventListener('click', function(){
+    document.querySelectorAll('.preset-item').forEach(function(p){p.classList.remove('on');});
+    el.classList.add('on');
+    setImage(el.dataset.url,'model');
+  });
+});
+
+/* ── Drag and drop ── */
+['garmentZone','modelZone'].forEach(function(id){
+  var zone=document.getElementById(id);
+  zone.addEventListener('dragover',function(e){e.preventDefault();zone.style.borderColor='rgba(201,169,110,0.7)';});
+  zone.addEventListener('dragleave',function(){zone.style.borderColor='';});
+  zone.addEventListener('drop',function(e){
+    e.preventDefault();zone.style.borderColor='';
+    var file=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
+    if(file&&file.type.startsWith('image/')) loadFile(file,id==='garmentZone'?'garment':'model');
+  });
+});
+
+/* ── Status helpers ── */
+function showStatus(msg,type){
+  var el=document.getElementById('sbar');
+  el.textContent=msg;
+  el.className='sbar on '+(type||'info');
+}
+function setProgress(pct,label){
+  var w=document.getElementById('progWrap');
+  var f=document.getElementById('progFill');
+  var l=document.getElementById('progLabel');
+  if(pct<0){w.classList.remove('on');return;}
+  w.classList.add('on');
+  f.style.width=pct+'%';
+  l.textContent=label||'';
+}
+function setStatusTxt(txt){document.getElementById('statusTxt').textContent=txt||'';}
+
+/* ── FASHN API calls ── */
+function fashnRequest(action, payload){
+  return fetch(FASHN_API, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({action:action, payload:payload})
+  }).then(function(res){
+    return res.json().then(function(j){
+      if(!res.ok) throw new Error(j.error||j.detail||('HTTP '+res.status));
+      return j;
     });
-  });}
+  });
+}
+
+/* ── Poll until done ── */
+function pollStatus(predictionId, apiKey){
+  var start=Date.now(), attempts=0;
+  function attempt(){
+    return new Promise(function(r){setTimeout(r,2500);}).then(function(){
+      attempts++;
+      var elapsed=Math.round((Date.now()-start)/1000);
+      setStatusTxt('Status: polling... '+elapsed+'s');
+      return fashnRequest('status',{id:predictionId, api_key:apiKey}).then(function(d){
+        var status=d.status||'';
+        if(status==='completed') return d;
+        if(status==='failed') throw new Error('Generowanie nieudane: '+(d.error||'Nieznany błąd'));
+        if(attempts>=80) throw new Error('Timeout — za długo czekamy');
+        return attempt();
+      });
+    });
+  }
   return attempt();
 }
-function mkpayload(pu,mu){var prompt=document.getElementById('promptTxt').value.trim();var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;var type=info?info.t:et;if(type==='tryon')return{model_image:mu,garment_image:pu,category:S.cat,mode:S.mode,garment_photo_type:'auto'};if(ep.indexOf('image-to-image')!==-1)return{image_url:pu,prompt:prompt,strength:0.8,num_inference_steps:28};if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pu?[pu]:[]};if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pu};return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};}
-function imgs(res){if(res.images)return res.images.map(function(i){return typeof i==='string'?i:i.url;}).filter(Boolean);if(res.image)return[typeof res.image==='string'?res.image:res.image.url];return[];}
-function addCard(url){var card=document.createElement('div');card.className='ic';card.dataset.url=url;var img=document.createElement('img');img.src=url;img.loading='lazy';var ov=document.createElement('div');ov.className='io';var b1=document.createElement('button');b1.className='ib2';b1.dataset.a='dl';b1.textContent='Pobierz';var b2=document.createElement('button');b2.className='ib2';b2.dataset.a='open';b2.textContent='Pelny';ov.appendChild(b1);ov.appendChild(b2);card.appendChild(img);card.appendChild(ov);document.getElementById('rGrid').appendChild(card);}
-document.getElementById('genBtn').addEventListener('click',function(){
-  if(busy)return;
+
+/* ── Build payload ── */
+function buildPayload(gUri, mUri){
   var key=document.getElementById('apiKey').value.trim();
-  var info=MI[ep],type=info?info.t:et;
-  if(!key){ss('Wpisz klucz API fal.ai','err');return;}
-  if(type==='tryon'&&!pUri){ss('Wgraj zdjecie ubrania','err');return;}
-  if(type==='tryon'&&!mUri){ss('Wgraj zdjecie modelki lub wybierz preset','err');return;}
+  if(currentType==='tryon'){
+    return {
+      api_key:key, model_name:'tryon-v1.6',
+      inputs:{
+        model_image:mUri, garment_image:gUri,
+        category:S.cat, mode:S.mode, garment_photo_type:S.gtype,
+        moderation_level:'permissive', num_samples:1, output_format:'png'
+      }
+    };
+  }
+  if(currentType==='product'){
+    var payload={api_key:key, model_name:'product-to-model', inputs:{garment_image:gUri, mode:S.pmode}};
+    var prompt=document.getElementById('prodPrompt').value.trim();
+    if(prompt) payload.inputs.prompt=prompt;
+    return payload;
+  }
+  // bg-remove
+  return {api_key:key, model_name:'background-remove', inputs:{image:gUri}};
+}
+
+/* ── Extract image URLs from response ── */
+function extractUrls(res){
+  if(res.output&&Array.isArray(res.output)) return res.output.filter(Boolean);
+  if(res.output&&typeof res.output==='string') return[res.output];
+  if(res.images) return res.images.map(function(i){return typeof i==='string'?i:i.url;}).filter(Boolean);
+  if(res.image) return[typeof res.image==='string'?res.image:res.image.url];
+  return[];
+}
+
+/* ── Add result card ── */
+function addCard(url){
+  document.getElementById('emptyEl').style.display='none';
+  var card=document.createElement('div');
+  card.className='result-card';card.dataset.url=url;
+  var img=document.createElement('img');img.src=url;img.loading='lazy';
+  var ov=document.createElement('div');ov.className='result-overlay';
+  var b1=document.createElement('button');b1.className='result-btn';b1.textContent='Pobierz';b1.dataset.a='dl';
+  var b2=document.createElement('button');b2.className='result-btn';b2.textContent='Pełny';b2.dataset.a='open';
+  ov.appendChild(b1);ov.appendChild(b2);
+  card.appendChild(img);card.appendChild(ov);
+  document.getElementById('rGrid').appendChild(card);
+}
+document.getElementById('rGrid').addEventListener('click',function(e){
+  var btn=e.target.closest('.result-btn');if(!btn)return;
+  var url=btn.closest('.result-card').dataset.url;if(!url)return;
+  if(btn.dataset.a==='dl'){var a=document.createElement('a');a.href=url;a.download='fashn-output.png';a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);}
+  else window.open(url,'_blank');
+});
+
+/* ── Generate ── */
+document.getElementById('genBtn').addEventListener('click', function(){
+  if(busy) return;
+  var key=document.getElementById('apiKey').value.trim();
+  if(!key){showStatus('Wpisz klucz API FASHN.ai','err');return;}
+  if(!garmentUri){showStatus(currentType==='bg'?'Wgraj zdjęcie produktu':'Wgraj zdjęcie ubrania','err');return;}
+  if(currentType==='tryon'&&!modelUri){showStatus('Wgraj zdjęcie modelki lub wybierz preset','err');return;}
+
   var shots=parseInt(document.getElementById('nShots').value);
-  busy=true;document.getElementById('genBtn').disabled=true;
-  document.getElementById('emptyEl').style.display='none';document.getElementById('rGrid').innerHTML='';document.getElementById('sb').className='sb';
+  busy=true;
+  document.getElementById('genBtn').disabled=true;
+  document.getElementById('emptyEl').style.display='none';
+  document.getElementById('rGrid').innerHTML='';
+  document.getElementById('sbar').className='sbar';
+
+  // Skeletons
+  var sg=document.getElementById('skelGrid');
+  sg.innerHTML='';
+  for(var i=0;i<shots;i++){
+    var sk=document.createElement('div');sk.className='skeleton';
+    var skp=document.createElement('p');skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';
+    sk.appendChild(skp);sg.appendChild(sk);
+  }
   document.getElementById('skelWrap').style.display='block';
-  var sg=document.getElementById('skelGrid');sg.innerHTML='';
-  for(var i=0;i<shots;i++){var sk=document.createElement('div');sk.className='sk';var skp=document.createElement('p');skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';sk.appendChild(skp);sg.appendChild(sk);}
-  sp(10,'Wysylanie...');ss('Uploadowanie zdjec...','info');document.getElementById('qi').style.display='block';
-  var results=[],tot=0;
-  var _pUri=pUri,_mUri=mUri;
-  Promise.all([uploadImg(_pUri,key),uploadImg(_mUri,key)]).then(function(urls){_pUri=urls[0];_mUri=urls[1];ss('Wysylanie do '+ep+'...','info');doShot(0);}).catch(function(err){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';sp(-1);ss('Blad uploadu: '+(err.message||'Nieznany blad'),'err');document.getElementById('emptyEl').style.display='flex';busy=false;document.getElementById('genBtn').disabled=false;});
+  setProgress(8,'Wysyłanie...');
+  showStatus('Łączenie z FASHN.ai...','info');
+
+  var results=[],total=0;
+  var _g=garmentUri,_m=modelUri;
+
   function doShot(idx){
-    if(idx>=shots){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';results.forEach(function(res){imgs(res).forEach(function(url){addCard(url);tot++;});});document.getElementById('rCount').textContent=tot+' zdiec';sp(-1);ss('Gotowe! '+tot+' zdiec wygenerowanych.','ok');busy=false;document.getElementById('genBtn').disabled=false;return;}
-    sp(15+idx*20,'Zdjecie '+(idx+1)+'/'+shots+'...');
-    falSubmit(key,ep,mkpayload(_pUri,_mUri)).then(function(sub){
-      if(sub.request_id)return poll(key,sub.request_id,eb);
-      return sub;
-    }).then(function(res){results.push(res);doShot(idx+1);}).catch(function(err){
-      document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';
-      sp(-1);ss('Blad: '+(err.message||'Nieznany blad'),'err');
+    if(idx>=shots){
+      document.getElementById('skelWrap').style.display='none';
+      setProgress(-1);setStatusTxt('');
+      results.forEach(function(res){
+        extractUrls(res).forEach(function(url){addCard(url);total++;});
+      });
+      document.getElementById('rCount').textContent=total+' zdjęć';
+      showStatus('Gotowe! Wygenerowano '+total+' zdjęć.','ok');
+      busy=false;document.getElementById('genBtn').disabled=false;
+      return;
+    }
+    setProgress(15+idx*20,'Zdjęcie '+(idx+1)+'/'+shots+'...');
+    showStatus('Wysyłanie żądania '+(idx+1)+'/'+shots+'...','info');
+    var payload=buildPayload(_g,_m);
+    fashnRequest('run', payload).then(function(sub){
+      var predId=sub.id;
+      if(!predId) throw new Error('Brak ID predykcji w odpowiedzi');
+      showStatus('Generowanie '+(idx+1)+'/'+shots+'... (ID: '+predId.substring(0,12)+'...)','info');
+      return pollStatus(predId, payload.api_key);
+    }).then(function(res){
+      results.push(res);
+      doShot(idx+1);
+    }).catch(function(err){
+      document.getElementById('skelWrap').style.display='none';
+      setProgress(-1);setStatusTxt('');
+      showStatus('Błąd: '+(err.message||'Nieznany błąd'),'err');
       document.getElementById('emptyEl').style.display='flex';
       busy=false;document.getElementById('genBtn').disabled=false;
     });
   }
   doShot(0);
 });
-ui();
+
+updateUI();
 })();
 </script>
 </body>
 </html>"""
 
 
-def fal_request(method, path, auth, body=None):
-    """Make a request to queue.fal.run"""
-    target = 'https://queue.fal.run/' + path
-    headers = {'Authorization': auth, 'User-Agent': 'AI-Model-Studio/2.0'}
-    if body:
-        headers['Content-Type'] = 'application/json'
-    req = urllib.request.Request(target, data=body, method=method, headers=headers)
+def fashn_request(method, path, api_key, body=None):
+    """Proxy request to FASHN.ai API"""
+    target = 'https://api.fashn.ai/v1/' + path
+    headers = {
+        'Authorization': 'Bearer ' + api_key,
+        'Content-Type': 'application/json',
+        'User-Agent': 'FASHN-Studio/1.0'
+    }
+    data = json.dumps(body).encode() if body else None
+    req = urllib.request.Request(target, data=data, method=method, headers=headers)
     ctx = ssl.create_default_context()
     try:
         with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
-            return r.status, r.read()
+            return r.status, json.loads(r.read())
     except urllib.error.HTTPError as e:
-        return e.code, e.read()
+        body_bytes = e.read()
+        try:
+            return e.code, json.loads(body_bytes)
+        except Exception:
+            return e.code, {'error': body_bytes.decode('utf-8', errors='replace')}
     except Exception as e:
-        return 502, json.dumps({'error': str(e)}).encode()
+        return 502, {'error': str(e)}
 
 
 @app.route('/')
@@ -346,7 +693,7 @@ def index():
         'Cache-Control': 'no-store',
         'Content-Security-Policy': (
             "default-src * data: blob:; "
-            "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; "
+            "script-src 'self' 'unsafe-inline'; "
             "style-src * 'unsafe-inline'; "
             "img-src * data: blob:; "
             "connect-src * data: blob:;"
@@ -354,60 +701,8 @@ def index():
     }
 
 
-@app.route('/upload', methods=['POST', 'OPTIONS'])
-def upload():
-    if request.method == 'OPTIONS':
-        return '', 204, {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type'
-        }
-
-    data = request.get_json(silent=True)
-    if not data:
-        return jsonify({'error': 'Invalid JSON'}), 400
-
-    auth = data.get('auth', '')
-    data_url = data.get('data_url', '')
-
-    if not data_url.startswith('data:'):
-        return jsonify({'error': 'Expected data URI'}), 400
-
-    try:
-        import base64
-        header, encoded = data_url.split(',', 1)
-        mime = header.split(':')[1].split(';')[0]
-        img_bytes = base64.b64decode(encoded)
-    except Exception as e:
-        return jsonify({'error': 'Failed to decode image: ' + str(e)}), 400
-
-    target = 'https://storage.fal.ai/upload'
-    headers = {
-        'Authorization': auth,
-        'Content-Type': mime,
-        'User-Agent': 'AI-Model-Studio/2.0'
-    }
-    req = urllib.request.Request(target, data=img_bytes, method='POST', headers=headers)
-    ctx = ssl.create_default_context()
-    try:
-        with urllib.request.urlopen(req, context=ctx, timeout=60) as r:
-            result = json.loads(r.read())
-            url = result.get('url', '')
-            return jsonify({'url': url}), 200, {'Access-Control-Allow-Origin': '*'}
-    except urllib.error.HTTPError as e:
-        body = e.read()
-        try:
-            err = json.loads(body)
-        except Exception:
-            err = {'error': body.decode('utf-8', errors='replace')}
-        return Response(json.dumps(err), status=e.code, content_type='application/json',
-                        headers={'Access-Control-Allow-Origin': '*'})
-    except Exception as e:
-        return jsonify({'error': str(e)}), 502, {'Access-Control-Allow-Origin': '*'}
-
-
-@app.route('/api', methods=['POST', 'OPTIONS'])
-def api():
+@app.route('/fashn', methods=['POST', 'OPTIONS'])
+def fashn_proxy():
     if request.method == 'OPTIONS':
         return '', 204, {
             'Access-Control-Allow-Origin': '*',
@@ -420,34 +715,29 @@ def api():
         return jsonify({'error': 'Invalid JSON'}), 400
 
     action = data.get('action', '')
-    auth = data.get('auth', '')
+    payload = data.get('payload', {})
+    api_key = payload.get('api_key', '')
 
-    if action == 'submit':
-        endpoint = data.get('endpoint', '')
-        body = json.dumps(data.get('payload', {})).encode()
-        status, resp = fal_request('POST', endpoint, auth, body)
+    if not api_key:
+        return jsonify({'error': 'Brak klucza API'}), 400
+
+    if action == 'run':
+        # Submit a new prediction
+        body = {
+            'model_name': payload.get('model_name', 'tryon-v1.6'),
+            'inputs': payload.get('inputs', {})
+        }
+        status, result = fashn_request('POST', 'run', api_key, body)
 
     elif action == 'status':
-        # Use base_endpoint (without subpath) for status/result — per fal.ai docs
-        base_ep = data.get('base_endpoint', data.get('endpoint', ''))
-        req_id = data.get('request_id', '')
-        path = base_ep + '/requests/' + req_id + '/status'
-        status, resp = fal_request('GET', path, auth)
-
-    elif action == 'result':
-        # Use base_endpoint (without subpath) for result — per fal.ai docs
-        base_ep = data.get('base_endpoint', data.get('endpoint', ''))
-        req_id = data.get('request_id', '')
-        path = base_ep + '/requests/' + req_id
-        status, resp = fal_request('GET', path, auth)
+        # Poll prediction status
+        pred_id = payload.get('id', '')
+        if not pred_id:
+            return jsonify({'error': 'Missing prediction id'}), 400
+        status, result = fashn_request('GET', 'status/' + pred_id, api_key)
 
     else:
         return jsonify({'error': 'Unknown action: ' + action}), 400
-
-    try:
-        result = json.loads(resp)
-    except Exception:
-        result = {'raw': resp.decode('utf-8', errors='replace')}
 
     return Response(
         json.dumps(result),
