@@ -1,7 +1,8 @@
-import os, ssl, json, urllib.request, urllib.error
+import os, ssl, json, uuid, base64, urllib.request, urllib.error
 from flask import Flask, request, Response, jsonify
 
 app = Flask(__name__)
+_img_store = {}  # uuid -> (bytes, mime)
 
 HTML = r"""<!DOCTYPE html>
 <html lang="pl">
@@ -257,11 +258,7 @@ var FAL_ST='https://storage.fal.ai/upload';
 function falFetch(url,opts){return fetch(url,opts).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||j.detail||j.message||('HTTP '+res.status));return j;});});}
 function uploadImg(dataUri,key){
   if(!dataUri||!dataUri.startsWith('data:'))return Promise.resolve(dataUri);
-  var parts=dataUri.split(',');var mime=parts[0].split(':')[1].split(';')[0];
-  var bin=atob(parts[1]);var arr=new Uint8Array(bin.length);
-  for(var i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
-  var blob=new Blob([arr],{type:mime});
-  return falFetch(FAL_ST,{method:'POST',headers:{'Authorization':'Key '+key,'Content-Type':mime},body:blob}).then(function(j){if(!j.url)throw new Error('Brak URL z uploadu');return j.url;});
+  return fetch('/store',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data_url:dataUri})}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||'Store error '+res.status);if(!j.url)throw new Error('Brak URL');return j.url;});});
 }
 function falSubmit(key,endpoint,payload){return falFetch(FAL_Q+endpoint,{method:'POST',headers:{'Authorization':'Key '+key,'Content-Type':'application/json'},body:JSON.stringify(payload)});}
 function falStatus(key,baseEp,reqId){return falFetch(FAL_Q+baseEp+'/requests/'+reqId+'/status',{method:'GET',headers:{'Authorization':'Key '+key}});}
@@ -352,6 +349,37 @@ def index():
             "connect-src * data: blob:;"
         )
     }
+
+
+@app.route('/store', methods=['POST'])
+def store():
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Invalid JSON'}), 400
+    data_url = data.get('data_url', '')
+    if not data_url.startswith('data:'):
+        return jsonify({'error': 'Expected data URI'}), 400
+    try:
+        header, encoded = data_url.split(',', 1)
+        mime = header.split(':')[1].split(';')[0]
+        img_bytes = base64.b64decode(encoded)
+    except Exception as e:
+        return jsonify({'error': 'Decode error: ' + str(e)}), 400
+    img_id = str(uuid.uuid4())
+    _img_store[img_id] = (img_bytes, mime)
+    public_url = request.host_url.rstrip('/') + '/img/' + img_id
+    return jsonify({'url': public_url})
+
+
+@app.route('/img/<img_id>')
+def serve_img(img_id):
+    if img_id not in _img_store:
+        return 'Not found', 404
+    img_bytes, mime = _img_store[img_id]
+    return Response(img_bytes, content_type=mime, headers={
+        'Cache-Control': 'public, max-age=3600',
+        'Access-Control-Allow-Origin': '*'
+    })
 
 
 @app.route('/upload', methods=['POST', 'OPTIONS'])
