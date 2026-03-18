@@ -111,15 +111,15 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
   <div class="sec">
     <div class="stitle">Model AI</div>
     <div class="pgrid" id="pgrid">
-      <div class="pc on" data-ep="fal-ai/fashn/tryon/v1.6" data-t="tryon"><div class="pc-name">FASHN Try-On</div><div class="pc-id">fal-ai/fashn/tryon/v1.6</div><div class="pc-price">$0.075</div><div class="pc-tag tt">try-on</div></div>
-      <div class="pc" data-ep="fal-ai/nano-banana-2/edit" data-t="edit"><div class="pc-name">Nano Banana 2</div><div class="pc-id">fal-ai/nano-banana-2/edit</div><div class="pc-price">$0.039</div><div class="pc-tag te">Gemini 3.1</div></div>
-      <div class="pc" data-ep="fal-ai/gemini-3-pro-image-preview" data-t="edit"><div class="pc-name">Nano Banana Pro</div><div class="pc-id">fal-ai/gemini-3-pro-image-preview</div><div class="pc-price">$0.15</div><div class="pc-tag te">Gemini 3 Pro</div></div>
-      <div class="pc" data-ep="fal-ai/flux-2/edit" data-t="edit"><div class="pc-name">FLUX.2 Edit</div><div class="pc-id">fal-ai/flux-2/edit</div><div class="pc-price">$0.05</div><div class="pc-tag te">img edit</div></div>
-      <div class="pc" data-ep="fal-ai/flux/dev/image-to-image" data-t="edit"><div class="pc-name">FLUX img2img</div><div class="pc-id">fal-ai/flux/dev/image-to-image</div><div class="pc-price">$0.025</div><div class="pc-tag te">img2img</div></div>
-      <div class="pc" data-ep="fal-ai/flux/dev" data-t="gen"><div class="pc-name">FLUX Dev</div><div class="pc-id">fal-ai/flux/dev</div><div class="pc-price">$0.025</div><div class="pc-tag tg">text2img</div></div>
-      <div class="pc" data-ep="fal-ai/flux/schnell" data-t="gen"><div class="pc-name">FLUX Schnell</div><div class="pc-id">fal-ai/flux/schnell</div><div class="pc-price">$0.003</div><div class="pc-tag tg">szybki</div></div>
-      <div class="pc" data-ep="fal-ai/recraft-v3" data-t="gen"><div class="pc-name">Recraft V3</div><div class="pc-id">fal-ai/recraft-v3</div><div class="pc-price">$0.04</div><div class="pc-tag tg">foto</div></div>
-      <div class="pc" data-ep="fal-ai/ideogram/v3" data-t="gen"><div class="pc-name">Ideogram V3</div><div class="pc-id">fal-ai/ideogram/v3</div><div class="pc-price">$0.08</div><div class="pc-tag tg">tekst</div></div>
+      <div class="pc on" data-ep="fal-ai/fashn/tryon/v1.6" data-t="tryon" data-base="fal-ai/fashn/tryon"><div class="pc-name">FASHN Try-On</div><div class="pc-id">fal-ai/fashn/tryon/v1.6</div><div class="pc-price">$0.075</div><div class="pc-tag tt">try-on</div></div>
+      <div class="pc" data-ep="fal-ai/nano-banana-2/edit" data-t="edit" data-base="fal-ai/nano-banana-2"><div class="pc-name">Nano Banana 2</div><div class="pc-id">fal-ai/nano-banana-2/edit</div><div class="pc-price">$0.039</div><div class="pc-tag te">Gemini 3.1</div></div>
+      <div class="pc" data-ep="fal-ai/gemini-3-pro-image-preview" data-t="edit" data-base="fal-ai/gemini-3-pro-image-preview"><div class="pc-name">Nano Banana Pro</div><div class="pc-id">fal-ai/gemini-3-pro-image-preview</div><div class="pc-price">$0.15</div><div class="pc-tag te">Gemini 3 Pro</div></div>
+      <div class="pc" data-ep="fal-ai/flux-2/edit" data-t="edit" data-base="fal-ai/flux-2"><div class="pc-name">FLUX.2 Edit</div><div class="pc-id">fal-ai/flux-2/edit</div><div class="pc-price">$0.05</div><div class="pc-tag te">img edit</div></div>
+      <div class="pc" data-ep="fal-ai/flux/dev/image-to-image" data-t="edit" data-base="fal-ai/flux"><div class="pc-name">FLUX img2img</div><div class="pc-id">fal-ai/flux/dev/image-to-image</div><div class="pc-price">$0.025</div><div class="pc-tag te">img2img</div></div>
+      <div class="pc" data-ep="fal-ai/flux/dev" data-t="gen" data-base="fal-ai/flux"><div class="pc-name">FLUX Dev</div><div class="pc-id">fal-ai/flux/dev</div><div class="pc-price">$0.025</div><div class="pc-tag tg">text2img</div></div>
+      <div class="pc" data-ep="fal-ai/flux/schnell" data-t="gen" data-base="fal-ai/flux"><div class="pc-name">FLUX Schnell</div><div class="pc-id">fal-ai/flux/schnell</div><div class="pc-price">$0.003</div><div class="pc-tag tg">szybki</div></div>
+      <div class="pc" data-ep="fal-ai/recraft-v3" data-t="gen" data-base="fal-ai/recraft-v3"><div class="pc-name">Recraft V3</div><div class="pc-id">fal-ai/recraft-v3</div><div class="pc-price">$0.04</div><div class="pc-tag tg">foto</div></div>
+      <div class="pc" data-ep="fal-ai/ideogram/v3" data-t="gen" data-base="fal-ai/ideogram"><div class="pc-name">Ideogram V3</div><div class="pc-id">fal-ai/ideogram/v3</div><div class="pc-price">$0.08</div><div class="pc-tag tg">tekst</div></div>
     </div>
     <div style="margin-top:10px">
       <div class="flbl">Lub wpisz wlasny endpoint</div>
@@ -202,16 +202,16 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
 'use strict';
 var S={cat:'tops',mode:'balanced'};
 var pUri=null,mUri=null,busy=false;
-var ep='fal-ai/fashn/tryon/v1.6',et='tryon';
+var ep='fal-ai/fashn/tryon/v1.6',et='tryon',eb='fal-ai/fashn/tryon';
 var MI={
-  'fal-ai/fashn/tryon/v1.6':{p:0.075,t:'tryon',ph:'',h:'Wgraj ubranie i modelke.'},
+  'fal-ai/fashn/tryon/v1.6':{p:0.075,t:'tryon',ph:'',h:'Wgraj ubranie i modelke. FASHN zachowuje kolory i wzory.'},
   'fal-ai/nano-banana-2/edit':{p:0.039,t:'edit',ph:'Put this clothing on a professional fashion model, white studio background, full body, photorealistic',h:'Gemini 3.1 - edytuje zdjecie wg opisu.'},
-  'fal-ai/gemini-3-pro-image-preview':{p:0.15,t:'edit',ph:'Luxury fashion editorial photo, elegant model, dramatic lighting, Vogue style',h:'Gemini 3 Pro - najwyzsza jakosc.'},
+  'fal-ai/gemini-3-pro-image-preview':{p:0.15,t:'edit',ph:'Luxury fashion editorial, elegant model, dramatic lighting, Vogue style',h:'Gemini 3 Pro - najwyzsza jakosc.'},
   'fal-ai/flux-2/edit':{p:0.05,t:'edit',ph:'Professional fashion model wearing this clothing, white studio background, full body',h:'FLUX.2 Edit.'},
   'fal-ai/flux/dev/image-to-image':{p:0.025,t:'edit',ph:'Fashion model wearing this clothing, white studio, professional photography',h:'FLUX Dev img2img.'},
-  'fal-ai/flux/dev':{p:0.025,t:'gen',ph:'Professional fashion model, white studio background, full body, 8K commercial photography',h:'FLUX Dev - z opisu tekstowego.'},
+  'fal-ai/flux/dev':{p:0.025,t:'gen',ph:'Professional fashion model, white studio background, full body, 8K',h:'FLUX Dev - z opisu tekstowego.'},
   'fal-ai/flux/schnell':{p:0.003,t:'gen',ph:'Fashion model, elegant outfit, white background, professional photo',h:'FLUX Schnell - szybki ~3 sek.'},
-  'fal-ai/recraft-v3':{p:0.04,t:'gen',ph:'Fashion model in stylish clothing, clean studio background, editorial photography',h:'Recraft V3.'},
+  'fal-ai/recraft-v3':{p:0.04,t:'gen',ph:'Fashion model in stylish clothing, studio background, editorial photography',h:'Recraft V3.'},
   'fal-ai/ideogram/v3':{p:0.08,t:'gen',ph:'Fashion model wearing stylish clothes, studio background',h:'Ideogram V3.'}
 };
 function ui(){
@@ -226,8 +226,20 @@ function ui(){
   if(info&&info.ph)document.getElementById('promptTxt').placeholder=info.ph;
   if(info&&info.h)document.getElementById('promptHint').textContent=info.h;
 }
-document.querySelectorAll('.pc').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});c.classList.add('on');ep=c.dataset.ep;et=c.dataset.t;document.getElementById('customEp').value='';ui();});});
-document.getElementById('customEp').addEventListener('input',function(){var v=this.value.trim();if(!v)return;document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});ep=v;et=v.indexOf('tryon')!==-1?'tryon':v.indexOf('edit')!==-1||v.indexOf('nano-banana')!==-1||v.indexOf('gemini')!==-1||v.indexOf('image-to-image')!==-1?'edit':'gen';ui();});
+document.querySelectorAll('.pc').forEach(function(c){
+  c.addEventListener('click',function(){
+    document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});
+    c.classList.add('on');ep=c.dataset.ep;et=c.dataset.t;eb=c.dataset.base||c.dataset.ep;
+    document.getElementById('customEp').value='';ui();
+  });
+});
+document.getElementById('customEp').addEventListener('input',function(){
+  var v=this.value.trim();if(!v)return;
+  document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});
+  ep=v;eb=v;
+  et=v.indexOf('tryon')!==-1?'tryon':v.indexOf('edit')!==-1||v.indexOf('nano-banana')!==-1||v.indexOf('gemini')!==-1||v.indexOf('image-to-image')!==-1?'edit':'gen';
+  ui();
+});
 document.getElementById('toggleKey').addEventListener('click',function(){var i=document.getElementById('apiKey');i.type=i.type==='password'?'text':'password';});
 document.getElementById('nShots').addEventListener('input',function(){document.getElementById('nVal').textContent=this.value;ui();});
 document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('[data-g="'+c.dataset.g+'"]').forEach(function(x){x.classList.remove('on');});c.classList.add('on');S[c.dataset.g]=c.dataset.v;});});
@@ -241,8 +253,21 @@ document.getElementById('rGrid').addEventListener('click',function(e){var btn=e.
 function ss(msg,type){var el=document.getElementById('sb');el.textContent=msg;el.className='sb on '+(type||'info');}
 function sp(pct,lbl){var w=document.getElementById('prog'),f=document.getElementById('pf'),l=document.getElementById('pl');if(pct<0){w.classList.remove('on');return;}w.classList.add('on');f.style.width=pct+'%';l.textContent=lbl||'';}
 function api(data){return fetch('/api',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||j.detail||j.message||'Blad '+res.status);return j;});});}
-function poll(key,reqId,endpoint){var start=Date.now(),attempts=0;function attempt(){return new Promise(function(r){setTimeout(r,2500);}).then(function(){attempts++;var e=Math.round((Date.now()-start)/1000);return api({action:'status',auth:'Key '+key,endpoint:endpoint,request_id:reqId}).then(function(d){document.getElementById('qi').textContent='Status: '+d.status+' - '+e+'s';if(d.status==='COMPLETED')return api({action:'result',auth:'Key '+key,endpoint:endpoint,request_id:reqId});if(d.status==='FAILED')throw new Error('Generowanie nieudane.');if(attempts>=80)throw new Error('Timeout');return attempt();});})}return attempt();}
-function payload(){var prompt=document.getElementById('promptTxt').value.trim();var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;var type=info?info.t:et;if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto'};if(ep.indexOf('image-to-image')!==-1)return{image_url:pUri,prompt:prompt,strength:0.8,num_inference_steps:28};if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pUri?[pUri]:[]};if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pUri};return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};}
+function poll(key,reqId,baseEp){
+  var start=Date.now(),attempts=0;
+  function attempt(){return new Promise(function(r){setTimeout(r,2500);}).then(function(){
+    attempts++;var e=Math.round((Date.now()-start)/1000);
+    return api({action:'status',auth:'Key '+key,base_endpoint:baseEp,request_id:reqId}).then(function(d){
+      document.getElementById('qi').textContent='Status: '+d.status+' - '+e+'s';
+      if(d.status==='COMPLETED')return api({action:'result',auth:'Key '+key,base_endpoint:baseEp,request_id:reqId});
+      if(d.status==='FAILED')throw new Error('Generowanie nieudane.');
+      if(attempts>=80)throw new Error('Timeout');
+      return attempt();
+    });
+  });}
+  return attempt();
+}
+function mkpayload(){var prompt=document.getElementById('promptTxt').value.trim();var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;var type=info?info.t:et;if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto'};if(ep.indexOf('image-to-image')!==-1)return{image_url:pUri,prompt:prompt,strength:0.8,num_inference_steps:28};if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pUri?[pUri]:[]};if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pUri};return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};}
 function imgs(res){if(res.images)return res.images.map(function(i){return typeof i==='string'?i:i.url;}).filter(Boolean);if(res.image)return[typeof res.image==='string'?res.image:res.image.url];return[];}
 function addCard(url){var card=document.createElement('div');card.className='ic';card.dataset.url=url;var img=document.createElement('img');img.src=url;img.loading='lazy';var ov=document.createElement('div');ov.className='io';var b1=document.createElement('button');b1.className='ib2';b1.dataset.a='dl';b1.textContent='Pobierz';var b2=document.createElement('button');b2.className='ib2';b2.dataset.a='open';b2.textContent='Pelny';ov.appendChild(b1);ov.appendChild(b2);card.appendChild(img);card.appendChild(ov);document.getElementById('rGrid').appendChild(card);}
 document.getElementById('genBtn').addEventListener('click',function(){
@@ -263,7 +288,15 @@ document.getElementById('genBtn').addEventListener('click',function(){
   function doShot(idx){
     if(idx>=shots){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';results.forEach(function(res){imgs(res).forEach(function(url){addCard(url);tot++;});});document.getElementById('rCount').textContent=tot+' zdiec';sp(-1);ss('Gotowe! '+tot+' zdiec wygenerowanych.','ok');busy=false;document.getElementById('genBtn').disabled=false;return;}
     sp(15+idx*20,'Zdjecie '+(idx+1)+'/'+shots+'...');
-    api({action:'submit',auth:'Key '+key,endpoint:ep,payload:payload()}).then(function(sub){if(sub.request_id)return poll(key,sub.request_id,ep);return sub;}).then(function(res){results.push(res);doShot(idx+1);}).catch(function(err){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';sp(-1);ss('Blad: '+(err.message||'Nieznany blad'),'err');document.getElementById('emptyEl').style.display='flex';busy=false;document.getElementById('genBtn').disabled=false;});
+    api({action:'submit',auth:'Key '+key,endpoint:ep,payload:mkpayload()}).then(function(sub){
+      if(sub.request_id)return poll(key,sub.request_id,eb);
+      return sub;
+    }).then(function(res){results.push(res);doShot(idx+1);}).catch(function(err){
+      document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';
+      sp(-1);ss('Blad: '+(err.message||'Nieznany blad'),'err');
+      document.getElementById('emptyEl').style.display='flex';
+      busy=false;document.getElementById('genBtn').disabled=false;
+    });
   }
   doShot(0);
 });
@@ -275,6 +308,7 @@ ui();
 
 
 def fal_request(method, path, auth, body=None):
+    """Make a request to queue.fal.run"""
     target = 'https://queue.fal.run/' + path
     headers = {'Authorization': auth, 'User-Agent': 'AI-Model-Studio/2.0'}
     if body:
@@ -294,7 +328,12 @@ def fal_request(method, path, auth, body=None):
 def index():
     return HTML, 200, {
         'Content-Type': 'text/html; charset=utf-8',
-        'Content-Security-Policy': "default-src * data: blob:; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; style-src * 'unsafe-inline'; img-src * data: blob:;"
+        'Content-Security-Policy': (
+            "default-src * data: blob:; "
+            "script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; "
+            "style-src * 'unsafe-inline'; "
+            "img-src * data: blob:;"
+        )
     }
 
 
@@ -306,25 +345,35 @@ def api():
             'Access-Control-Allow-Methods': 'POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type'
         }
+
     data = request.get_json(silent=True)
     if not data:
         return jsonify({'error': 'Invalid JSON'}), 400
 
     action = data.get('action', '')
     auth = data.get('auth', '')
-    endpoint = data.get('endpoint', '')
 
     if action == 'submit':
+        endpoint = data.get('endpoint', '')
         body = json.dumps(data.get('payload', {})).encode()
         status, resp = fal_request('POST', endpoint, auth, body)
+
     elif action == 'status':
+        # Use base_endpoint (without subpath) for status/result — per fal.ai docs
+        base_ep = data.get('base_endpoint', data.get('endpoint', ''))
         req_id = data.get('request_id', '')
-        status, resp = fal_request('GET', endpoint + '/requests/' + req_id + '/status', auth)
+        path = base_ep + '/requests/' + req_id + '/status'
+        status, resp = fal_request('GET', path, auth)
+
     elif action == 'result':
+        # Use base_endpoint (without subpath) for result — per fal.ai docs
+        base_ep = data.get('base_endpoint', data.get('endpoint', ''))
         req_id = data.get('request_id', '')
-        status, resp = fal_request('GET', endpoint + '/requests/' + req_id, auth)
+        path = base_ep + '/requests/' + req_id
+        status, resp = fal_request('GET', path, auth)
+
     else:
-        return jsonify({'error': 'unknown action: ' + action}), 400
+        return jsonify({'error': 'Unknown action: ' + action}), 400
 
     try:
         result = json.loads(resp)
