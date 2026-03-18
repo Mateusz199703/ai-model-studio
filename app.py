@@ -2,6 +2,7 @@ import os, ssl, json, urllib.request, urllib.error
 from flask import Flask, request, Response, jsonify
 
 app = Flask(__name__)
+_SSL_CTX = ssl.create_default_context()
 
 HTML = r"""<!DOCTYPE html>
 <html lang="pl">
@@ -364,7 +365,8 @@ textarea{resize:vertical;min-height:72px;line-height:1.6}
 /* ── State ── */
 var S = {cat:'auto', mode:'balanced', gtype:'auto', pmode:'balanced'};
 var garmentUri=null, modelUri=null, busy=false;
-var currentModel='tryon-v1.6', currentType='tryon';
+var currentModel='tryon-v1.6';
+var _lastStatusTxt='';
 
 var FASHN_API = '/fashn';
 var MODELS = {
@@ -376,19 +378,17 @@ var MODELS = {
 /* ── UI update ── */
 function updateUI(){
   var info = MODELS[currentModel] || {price:0.075, type:'tryon'};
+  var type = info.type;
   var shots = parseInt(document.getElementById('nShots').value);
   document.getElementById('costHint').textContent = '~$'+(info.price*shots).toFixed(3)+' za '+shots+' zdjęcie';
   document.getElementById('modelHint').textContent = info.hint;
-  // show/hide sections
-  var isTryon = currentType==='tryon';
-  var isProd = currentType==='product';
+  var isTryon = type==='tryon';
+  var isProd = type==='product';
   document.getElementById('modelUploadCol').style.display = isTryon?'':'none';
   document.getElementById('presetSection').style.display = isTryon?'':'none';
   document.getElementById('tryonOptions').style.display = isTryon?'':'none';
   document.getElementById('prodOptions').style.display = isProd?'':'none';
-  // bg-remove: only garment upload needed
-  var garmentLabel = currentType==='bg'?'Zdjęcie produktu':'Ubranie';
-  document.querySelector('#garmentZone h4').textContent = 'Wgraj '+(currentType==='bg'?'zdjęcie':'ubranie');
+  document.querySelector('#garmentZone h4').textContent = 'Wgraj '+(type==='bg'?'zdjęcie':'ubranie');
 }
 
 /* ── Model tabs ── */
@@ -397,7 +397,6 @@ document.querySelectorAll('.mtab').forEach(function(tab){
     document.querySelectorAll('.mtab').forEach(function(t){t.classList.remove('on');});
     tab.classList.add('on');
     currentModel = tab.dataset.m;
-    currentType = tab.dataset.t;
     updateUI();
   });
 });
@@ -503,7 +502,12 @@ function setProgress(pct,label){
   f.style.width=pct+'%';
   l.textContent=label||'';
 }
-function setStatusTxt(txt){document.getElementById('statusTxt').textContent=txt||'';}
+function setStatusTxt(txt){
+  var s=txt||'';
+  if(s===_lastStatusTxt) return;
+  _lastStatusTxt=s;
+  document.getElementById('statusTxt').textContent=s;
+}
 
 /* ── FASHN API calls ── */
 function fashnRequest(action, payload){
@@ -542,7 +546,8 @@ function pollStatus(predictionId, apiKey){
 /* ── Build payload ── */
 function buildPayload(gUri, mUri){
   var key=document.getElementById('apiKey').value.trim();
-  if(currentType==='tryon'){
+  var type=(MODELS[currentModel]||{}).type;
+  if(type==='tryon'){
     return {
       api_key:key, model_name:'tryon-v1.6',
       inputs:{
@@ -552,7 +557,7 @@ function buildPayload(gUri, mUri){
       }
     };
   }
-  if(currentType==='product'){
+  if(type==='product'){
     var payload={api_key:key, model_name:'product-to-model', inputs:{garment_image:gUri, mode:S.pmode}};
     var prompt=document.getElementById('prodPrompt').value.trim();
     if(prompt) payload.inputs.prompt=prompt;
@@ -595,42 +600,55 @@ document.getElementById('rGrid').addEventListener('click',function(e){
 document.getElementById('genBtn').addEventListener('click', function(){
   if(busy) return;
   var key=document.getElementById('apiKey').value.trim();
+  var modelType=(MODELS[currentModel]||{}).type;
   if(!key){showStatus('Wpisz klucz API FASHN.ai','err');return;}
-  if(!garmentUri){showStatus(currentType==='bg'?'Wgraj zdjęcie produktu':'Wgraj zdjęcie ubrania','err');return;}
-  if(currentType==='tryon'&&!modelUri){showStatus('Wgraj zdjęcie modelki lub wybierz preset','err');return;}
+  if(!garmentUri){showStatus(modelType==='bg'?'Wgraj zdjęcie produktu':'Wgraj zdjęcie ubrania','err');return;}
+  if(modelType==='tryon'&&!modelUri){showStatus('Wgraj zdjęcie modelki lub wybierz preset','err');return;}
+
+  // Cache DOM refs used repeatedly in this handler
+  var elGenBtn=document.getElementById('genBtn');
+  var elEmptyEl=document.getElementById('emptyEl');
+  var elRGrid=document.getElementById('rGrid');
+  var elSkelWrap=document.getElementById('skelWrap');
+  var elSkelGrid=document.getElementById('skelGrid');
+  var elRCount=document.getElementById('rCount');
 
   var shots=parseInt(document.getElementById('nShots').value);
   busy=true;
-  document.getElementById('genBtn').disabled=true;
-  document.getElementById('emptyEl').style.display='none';
-  document.getElementById('rGrid').innerHTML='';
+  elGenBtn.disabled=true;
+  elEmptyEl.style.display='none';
+  elRGrid.innerHTML='';
   document.getElementById('sbar').className='sbar';
 
   // Skeletons
-  var sg=document.getElementById('skelGrid');
-  sg.innerHTML='';
+  elSkelGrid.innerHTML='';
   for(var i=0;i<shots;i++){
     var sk=document.createElement('div');sk.className='skeleton';
     var skp=document.createElement('p');skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';
-    sk.appendChild(skp);sg.appendChild(sk);
+    sk.appendChild(skp);elSkelGrid.appendChild(sk);
   }
-  document.getElementById('skelWrap').style.display='block';
+  elSkelWrap.style.display='block';
   setProgress(8,'Wysyłanie...');
   showStatus('Łączenie z FASHN.ai...','info');
 
   var results=[],total=0;
   var _g=garmentUri,_m=modelUri;
 
+  function doneGenerate(isErr){
+    elSkelWrap.style.display='none';
+    setProgress(-1);setStatusTxt('');
+    busy=false;elGenBtn.disabled=false;
+    if(isErr) elEmptyEl.style.display='flex';
+  }
+
   function doShot(idx){
     if(idx>=shots){
-      document.getElementById('skelWrap').style.display='none';
-      setProgress(-1);setStatusTxt('');
+      doneGenerate(false);
       results.forEach(function(res){
         extractUrls(res).forEach(function(url){addCard(url);total++;});
       });
-      document.getElementById('rCount').textContent=total+' zdjęć';
+      elRCount.textContent=total+' zdjęć';
       showStatus('Gotowe! Wygenerowano '+total+' zdjęć.','ok');
-      busy=false;document.getElementById('genBtn').disabled=false;
       return;
     }
     setProgress(15+idx*20,'Zdjęcie '+(idx+1)+'/'+shots+'...');
@@ -645,11 +663,8 @@ document.getElementById('genBtn').addEventListener('click', function(){
       results.push(res);
       doShot(idx+1);
     }).catch(function(err){
-      document.getElementById('skelWrap').style.display='none';
-      setProgress(-1);setStatusTxt('');
+      doneGenerate(true);
       showStatus('Błąd: '+(err.message||'Nieznany błąd'),'err');
-      document.getElementById('emptyEl').style.display='flex';
-      busy=false;document.getElementById('genBtn').disabled=false;
     });
   }
   doShot(0);
@@ -672,9 +687,8 @@ def fashn_request(method, path, api_key, body=None):
     }
     data = json.dumps(body).encode() if body else None
     req = urllib.request.Request(target, data=data, method=method, headers=headers)
-    ctx = ssl.create_default_context()
     try:
-        with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
+        with urllib.request.urlopen(req, context=_SSL_CTX, timeout=30) as r:
             return r.status, json.loads(r.read())
     except urllib.error.HTTPError as e:
         body_bytes = e.read()
