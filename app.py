@@ -632,7 +632,8 @@ def proxy(fal_path):
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Headers': 'Content-Type, Authorization'
         }
-target = 'https://fal.run/' + fal_path    auth = request.headers.get('Authorization', '')
+target = 'https://fal.run/' + fal_path
+        auth = request.headers.get('Authorization', '')
     body = request.get_data() if request.method == 'POST' else None
     req = urllib.request.Request(target, data=body, method=request.method,
         headers={'Authorization': auth, 'Content-Type': 'application/json', 'User-Agent': 'AI-Model-Studio/1.0'})
