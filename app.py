@@ -3,68 +3,6 @@ from flask import Flask, request, Response, jsonify
 
 app = Flask(__name__)
 
-# ── Proxy fal.ai ──────────────────────────────────────────────────────────
-def fal_request(method, path, auth, body=None):
-    target = 'https://queue.fal.run/' + path
-    headers = {'Authorization': auth, 'User-Agent': 'AI-Model-Studio/2.0'}
-    if body:
-        headers['Content-Type'] = 'application/json'
-    req = urllib.request.Request(target, data=body, method=method, headers=headers)
-    ctx = ssl.create_default_context()
-    try:
-        with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
-            return r.status, r.read()
-    except urllib.error.HTTPError as e:
-        return e.code, e.read()
-    except Exception as e:
-        return 502, json.dumps({'error': str(e)}).encode()
-
-@app.route('/api', methods=['POST', 'OPTIONS'])
-def api():
-    if request.method == 'OPTIONS':
-        return '', 204, cors_headers()
-    data = request.get_json()
-    action = data.get('action')
-    auth = data.get('auth', '')
-    endpoint = data.get('endpoint', '')
-    if action == 'submit':
-        payload = json.dumps(data.get('payload', {})).encode()
-        status, body = fal_request('POST', endpoint, auth, payload)
-    elif action == 'status':
-        req_id = data.get('request_id')
-        status, body = fal_request('GET', endpoint + '/requests/' + req_id + '/status', auth)
-    elif action == 'result':
-        req_id = data.get('request_id')
-        status, body = fal_request('GET', endpoint + '/requests/' + req_id, auth)
-    else:
-        return jsonify({'error': 'unknown action'}), 400
-    try:
-        result = json.loads(body)
-    except Exception:
-        result = {'raw': body.decode('utf-8', errors='replace')}
-    return Response(json.dumps(result), status=status, content_type='application/json',
-        headers=cors_headers())
-
-def cors_headers():
-    return {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-    }
-
-# ── HTML ──────────────────────────────────────────────────────────────────
-@app.route('/')
-def index():
-    return HTML, 200, {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Content-Security-Policy': "default-src * data: blob:; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; style-src * 'unsafe-inline'; img-src * data: blob:;"
-    }
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 3333))
-    app.run(host='0.0.0.0', port=port)
-
-
 HTML = r"""<!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -98,8 +36,7 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
 .hint{font-size:10px;color:rgba(240,236,230,0.28);margin-top:5px;line-height:1.6;font-weight:300}
 .pgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-top:7px}
 .pc{border:0.5px solid rgba(240,236,230,0.1);border-radius:8px;padding:7px 9px;cursor:pointer;transition:all 0.18s;background:rgba(240,236,230,0.02)}
-.pc:hover{border-color:rgba(201,169,110,0.4);background:rgba(201,169,110,0.05)}
-.pc.on{border-color:#c9a96e;background:rgba(201,169,110,0.08)}
+.pc:hover{border-color:rgba(201,169,110,0.4)}.pc.on{border-color:#c9a96e;background:rgba(201,169,110,0.08)}
 .pc-name{font-size:11px;font-weight:500;color:#f0ece6;margin-bottom:1px}
 .pc-id{font-size:8px;color:rgba(240,236,230,0.3);font-family:monospace;margin-bottom:3px;word-break:break-all}
 .pc-price{font-size:9px;color:#c9a96e}
@@ -111,35 +48,29 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
 .uz{border:1px dashed rgba(201,169,110,0.3);border-radius:10px;padding:13px 10px;text-align:center;cursor:pointer;transition:all 0.2s;background:rgba(201,169,110,0.02);position:relative;min-height:115px;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .uz:hover{border-color:rgba(201,169,110,0.7);background:rgba(201,169,110,0.07)}
 .uz input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.uz h4{font-size:11px;font-weight:500;margin:5px 0 2px}
-.uz p{font-size:10px;color:rgba(240,236,230,0.35);font-weight:300;line-height:1.4}
+.uz h4{font-size:11px;font-weight:500;margin:5px 0 2px}.uz p{font-size:10px;color:rgba(240,236,230,0.35);font-weight:300;line-height:1.4}
 .badge{font-size:9px;letter-spacing:0.07em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-bottom:4px}
 .bp{background:rgba(201,169,110,0.15);color:#c9a96e;border:0.5px solid rgba(201,169,110,0.3)}
 .bm{background:rgba(56,138,221,0.12);color:rgba(183,212,244,0.9);border:0.5px solid rgba(56,138,221,0.25)}
 .pv{display:none;position:relative;border-radius:8px;overflow:hidden;background:rgba(240,236,230,0.04);border:0.5px solid rgba(240,236,230,0.1)}
-.pv.on{display:block}
-.pv img{width:100%;max-height:140px;object-fit:contain;display:block}
+.pv.on{display:block}.pv img{width:100%;max-height:140px;object-fit:contain;display:block}
 .db{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:4px;background:rgba(14,12,10,0.85);border:0.5px solid rgba(240,236,230,0.2);color:#f0ece6;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center}
 .pl{position:absolute;bottom:0;left:0;right:0;padding:4px 8px;background:rgba(14,12,10,0.75);font-size:10px;color:rgba(240,236,230,0.6)}
 .chips{display:flex;flex-wrap:wrap;gap:5px}
 .chip{font-size:11px;padding:4px 10px;border-radius:100px;border:0.5px solid rgba(240,236,230,0.16);background:transparent;color:rgba(240,236,230,0.55);cursor:pointer;transition:all 0.18s;font-family:'DM Sans',sans-serif;white-space:nowrap}
-.chip:hover{border-color:rgba(201,169,110,0.45);color:#f0ece6}
-.chip.on{background:rgba(201,169,110,0.13);border-color:#c9a96e;color:#c9a96e}
+.chip:hover{border-color:rgba(201,169,110,0.45);color:#f0ece6}.chip.on{background:rgba(201,169,110,0.13);border-color:#c9a96e;color:#c9a96e}
 .pmods{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:7px}
 .pm{border-radius:7px;cursor:pointer;border:1.5px solid transparent;transition:all 0.2s;aspect-ratio:3/4;background:rgba(240,236,230,0.05);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(240,236,230,0.35);text-align:center;position:relative;padding:4px}
 .pm.on{border-color:#c9a96e}.pm:hover{border-color:rgba(201,169,110,0.45)}
 .pm span{position:relative;z-index:1;font-size:9px;background:rgba(14,12,10,0.75);padding:2px 4px;border-radius:3px}
-.mpill{display:inline-flex;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(201,169,110,0.1);border:0.5px solid rgba(201,169,110,0.25);color:#c9a96e;margin-top:6px}
+.mpill{display:inline-flex;font-size:10px;padding:3px 9px;border-radius:4px;background:rgba(201,169,110,0.1);border:0.5px solid rgba(201,169,110,0.25);color:#c9a96e;margin-top:6px;word-break:break-all}
 .gb{width:100%;padding:14px;background:#c9a96e;border:none;border-radius:10px;color:#0e0c0a;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;transition:all 0.22s;margin-top:14px}
-.gb:hover:not(:disabled){background:#dbbf87;transform:translateY(-1px)}
-.gb:disabled{background:rgba(201,169,110,0.18);color:rgba(14,12,10,0.4);cursor:not-allowed}
+.gb:hover:not(:disabled){background:#dbbf87;transform:translateY(-1px)}.gb:disabled{background:rgba(201,169,110,0.18);color:rgba(14,12,10,0.4);cursor:not-allowed}
 .sb{padding:10px 14px;border-radius:8px;font-size:12px;line-height:1.6;display:none}
-.sb.on{display:block}
-.sb.info{background:rgba(56,138,221,0.09);border:0.5px solid rgba(56,138,221,0.25);color:rgba(183,212,244,0.9)}
+.sb.on{display:block}.sb.info{background:rgba(56,138,221,0.09);border:0.5px solid rgba(56,138,221,0.25);color:rgba(183,212,244,0.9)}
 .sb.err{background:rgba(226,75,74,0.09);border:0.5px solid rgba(226,75,74,0.25);color:rgba(240,193,193,0.9)}
 .sb.ok{background:rgba(29,158,117,0.09);border:0.5px solid rgba(29,158,117,0.25);color:rgba(159,225,203,0.9)}
-.prog{display:none;align-items:center;gap:12px;font-size:11px;color:rgba(240,236,230,0.4)}
-.prog.on{display:flex}
+.prog{display:none;align-items:center;gap:12px;font-size:11px;color:rgba(240,236,230,0.4)}.prog.on{display:flex}
 .pb{flex:1;height:2px;background:rgba(240,236,230,0.1);border-radius:2px;overflow:hidden}
 .pf{height:100%;background:#c9a96e;border-radius:2px;transition:width 0.5s;width:0%}
 .dot{width:7px;height:7px;border-radius:50%;background:#c9a96e;flex-shrink:0;animation:pulse 1s infinite}
@@ -148,8 +79,7 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
 .empty p{font-size:13px;line-height:1.8;max-width:220px;font-weight:300}
 .rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
 .ic{position:relative;border-radius:12px;overflow:hidden;background:rgba(240,236,230,0.04);border:0.5px solid rgba(240,236,230,0.1);aspect-ratio:3/4;transition:all 0.22s}
-.ic:hover{border-color:rgba(201,169,110,0.4);transform:translateY(-2px)}
-.ic img{width:100%;height:100%;object-fit:cover;display:block}
+.ic:hover{border-color:rgba(201,169,110,0.4);transform:translateY(-2px)}.ic img{width:100%;height:100%;object-fit:cover;display:block}
 .io{position:absolute;bottom:0;left:0;right:0;padding:9px;background:linear-gradient(transparent,rgba(14,12,10,0.88));display:flex;gap:5px;opacity:0;transition:opacity 0.2s}
 .ic:hover .io{opacity:1}
 .ib2{flex:1;padding:6px 4px;border-radius:6px;border:0.5px solid rgba(240,236,230,0.22);background:rgba(14,12,10,0.7);color:#f0ece6;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center}
@@ -176,9 +106,8 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
     </div>
-    <div class="hint"><a href="https://fal.ai/dashboard/keys" target="_blank">fal.ai/dashboard/keys</a> &nbsp;|&nbsp; <a href="https://fal.ai/dashboard/billing" target="_blank">doladowanie</a></div>
+    <div class="hint"><a href="https://fal.ai/dashboard/keys" target="_blank">fal.ai/dashboard/keys</a> | <a href="https://fal.ai/dashboard/billing" target="_blank">doladowanie</a></div>
   </div>
-
   <div class="sec">
     <div class="stitle">Model AI</div>
     <div class="pgrid" id="pgrid">
@@ -196,12 +125,11 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
       <div class="flbl">Lub wpisz wlasny endpoint</div>
       <div class="row">
         <input type="text" id="customEp" placeholder="np. fal-ai/flux-pro/v1.1-ultra" style="font-family:monospace;font-size:11px">
-        <a href="https://fal.ai/explore/models" target="_blank"><button class="ib" title="Przegladaj"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></a>
+        <a href="https://fal.ai/explore/models" target="_blank"><button class="ib"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></a>
       </div>
     </div>
     <div class="mpill" id="mpill">fal-ai/fashn/tryon/v1.6</div>
   </div>
-
   <div class="sec" id="uploadSec">
     <div class="stitle">Zdjecia wejsciowe</div>
     <div class="ucols">
@@ -224,7 +152,6 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
       </div>
     </div>
   </div>
-
   <div class="sec" id="tryonOpts">
     <div class="stitle">Opcje try-on</div>
     <div style="margin-bottom:9px"><div class="flbl">Typ ubrania</div>
@@ -242,13 +169,11 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
       </div>
     </div>
   </div>
-
   <div class="sec" id="promptSec" style="display:none">
     <div class="stitle">Prompt</div>
     <textarea id="promptTxt" placeholder="Opisz co chcesz wygenerowac..."></textarea>
     <div class="hint" id="promptHint"></div>
   </div>
-
   <div class="sec">
     <div class="stitle">Liczba zdiec</div>
     <div style="display:flex;align-items:center;gap:12px">
@@ -257,10 +182,8 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
     </div>
     <div class="hint" id="costHint">~$0.075 za 1 zdjecie</div>
   </div>
-
   <button class="gb" id="genBtn">Generuj zdjecia</button>
 </div>
-
 <div class="rpanel">
   <div style="display:flex;align-items:center;justify-content:space-between">
     <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#c9a96e;font-weight:500">Wyniki</div>
@@ -274,7 +197,6 @@ textarea{resize:vertical;min-height:70px;line-height:1.55}
   <div class="rg" id="rGrid"></div>
 </div>
 </div>
-
 <script>
 (function(){
 'use strict';
@@ -292,7 +214,6 @@ var MI={
   'fal-ai/recraft-v3':{p:0.04,t:'gen',ph:'Fashion model in stylish clothing, clean studio background, editorial photography',h:'Recraft V3.'},
   'fal-ai/ideogram/v3':{p:0.08,t:'gen',ph:'Fashion model wearing stylish clothes, studio background',h:'Ideogram V3.'}
 };
-
 function ui(){
   document.getElementById('mpill').textContent=ep;
   var info=MI[ep],price=info?info.p:0.05,type=info?info.t:et;
@@ -305,118 +226,25 @@ function ui(){
   if(info&&info.ph)document.getElementById('promptTxt').placeholder=info.ph;
   if(info&&info.h)document.getElementById('promptHint').textContent=info.h;
 }
-
-document.querySelectorAll('.pc').forEach(function(c){
-  c.addEventListener('click',function(){
-    document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});
-    c.classList.add('on');ep=c.dataset.ep;et=c.dataset.t;
-    document.getElementById('customEp').value='';ui();
-  });
-});
-
-document.getElementById('customEp').addEventListener('input',function(){
-  var v=this.value.trim();if(!v)return;
-  document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});
-  ep=v;
-  et=v.indexOf('tryon')!==-1?'tryon':v.indexOf('edit')!==-1||v.indexOf('nano-banana')!==-1||v.indexOf('gemini')!==-1||v.indexOf('image-to-image')!==-1?'edit':'gen';
-  ui();
-});
-
-document.getElementById('toggleKey').addEventListener('click',function(){
-  var i=document.getElementById('apiKey');i.type=i.type==='password'?'text':'password';
-});
+document.querySelectorAll('.pc').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});c.classList.add('on');ep=c.dataset.ep;et=c.dataset.t;document.getElementById('customEp').value='';ui();});});
+document.getElementById('customEp').addEventListener('input',function(){var v=this.value.trim();if(!v)return;document.querySelectorAll('.pc').forEach(function(x){x.classList.remove('on');});ep=v;et=v.indexOf('tryon')!==-1?'tryon':v.indexOf('edit')!==-1||v.indexOf('nano-banana')!==-1||v.indexOf('gemini')!==-1||v.indexOf('image-to-image')!==-1?'edit':'gen';ui();});
+document.getElementById('toggleKey').addEventListener('click',function(){var i=document.getElementById('apiKey');i.type=i.type==='password'?'text':'password';});
 document.getElementById('nShots').addEventListener('input',function(){document.getElementById('nVal').textContent=this.value;ui();});
-document.querySelectorAll('.chip').forEach(function(c){
-  c.addEventListener('click',function(){
-    document.querySelectorAll('[data-g="'+c.dataset.g+'"]').forEach(function(x){x.classList.remove('on');});
-    c.classList.add('on');S[c.dataset.g]=c.dataset.v;
-  });
-});
-
+document.querySelectorAll('.chip').forEach(function(c){c.addEventListener('click',function(){document.querySelectorAll('[data-g="'+c.dataset.g+'"]').forEach(function(x){x.classList.remove('on');});c.classList.add('on');S[c.dataset.g]=c.dataset.v;});});
 document.getElementById('pFile').addEventListener('change',function(){if(this.files&&this.files[0])lf(this.files[0],'p');});
 document.getElementById('mFile').addEventListener('change',function(){if(this.files&&this.files[0])lf(this.files[0],'m');});
-
-function lf(file,t){
-  var r=new FileReader();
-  r.onload=function(e){
-    if(t==='p'){pUri=e.target.result;document.getElementById('pImg').src=pUri;document.getElementById('pPrev').classList.add('on');document.getElementById('pZone').style.display='none';}
-    else{mUri=e.target.result;document.getElementById('mImg').src=mUri;document.getElementById('mPrev').classList.add('on');document.getElementById('mZone').style.display='none';document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});}
-  };
-  r.readAsDataURL(file);
-}
+function lf(file,t){var r=new FileReader();r.onload=function(e){if(t==='p'){pUri=e.target.result;document.getElementById('pImg').src=pUri;document.getElementById('pPrev').classList.add('on');document.getElementById('pZone').style.display='none';}else{mUri=e.target.result;document.getElementById('mImg').src=mUri;document.getElementById('mPrev').classList.add('on');document.getElementById('mZone').style.display='none';document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});}};r.readAsDataURL(file);}
 document.getElementById('delP').addEventListener('click',function(){pUri=null;document.getElementById('pImg').src='';document.getElementById('pPrev').classList.remove('on');document.getElementById('pZone').style.display='';document.getElementById('pFile').value='';});
 document.getElementById('delM').addEventListener('click',function(){mUri=null;document.getElementById('mImg').src='';document.getElementById('mPrev').classList.remove('on');document.getElementById('mZone').style.display='';document.getElementById('mFile').value='';document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});});
 document.querySelectorAll('.pm').forEach(function(el){el.addEventListener('click',function(){document.querySelectorAll('.pm').forEach(function(p){p.classList.remove('on');});el.classList.add('on');mUri=el.dataset.url;document.getElementById('mImg').src=mUri;document.getElementById('mPrev').classList.add('on');document.getElementById('mZone').style.display='none';});});
-
-document.getElementById('rGrid').addEventListener('click',function(e){
-  var btn=e.target.closest('.ib2');if(!btn)return;
-  var card=btn.closest('.ic');if(!card)return;
-  var url=card.dataset.url;if(!url)return;
-  if(btn.dataset.a==='dl'){var a=document.createElement('a');a.href=url;a.download='zdjecie.jpg';a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);}
-  else{window.open(url,'_blank');}
-});
-
+document.getElementById('rGrid').addEventListener('click',function(e){var btn=e.target.closest('.ib2');if(!btn)return;var card=btn.closest('.ic');if(!card)return;var url=card.dataset.url;if(!url)return;if(btn.dataset.a==='dl'){var a=document.createElement('a');a.href=url;a.download='zdjecie.jpg';a.target='_blank';document.body.appendChild(a);a.click();document.body.removeChild(a);}else{window.open(url,'_blank');}});
 function ss(msg,type){var el=document.getElementById('sb');el.textContent=msg;el.className='sb on '+(type||'info');}
 function sp(pct,lbl){var w=document.getElementById('prog'),f=document.getElementById('pf'),l=document.getElementById('pl');if(pct<0){w.classList.remove('on');return;}w.classList.add('on');f.style.width=pct+'%';l.textContent=lbl||'';}
-
-function api(data){
-  return fetch('/api',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(data)
-  }).then(function(res){
-    return res.json().then(function(j){
-      if(!res.ok)throw new Error(j.error||j.detail||j.message||'Blad '+res.status);
-      return j;
-    });
-  });
-}
-
-function poll(key,reqId,endpoint){
-  var start=Date.now(),attempts=0;
-  function attempt(){
-    return new Promise(function(r){setTimeout(r,2500);}).then(function(){
-      attempts++;
-      var e=Math.round((Date.now()-start)/1000);
-      return api({action:'status',auth:'Key '+key,endpoint:endpoint,request_id:reqId}).then(function(d){
-        document.getElementById('qi').textContent='Status: '+d.status+' - '+e+'s';
-        if(d.status==='COMPLETED')return api({action:'result',auth:'Key '+key,endpoint:endpoint,request_id:reqId});
-        if(d.status==='FAILED')throw new Error('Generowanie nieudane.');
-        if(attempts>=80)throw new Error('Timeout');
-        return attempt();
-      });
-    });
-  }
-  return attempt();
-}
-
-function payload(){
-  var prompt=document.getElementById('promptTxt').value.trim();
-  var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;
-  var type=info?info.t:et;
-  if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto'};
-  if(ep.indexOf('image-to-image')!==-1)return{image_url:pUri,prompt:prompt,strength:0.8,num_inference_steps:28};
-  if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pUri?[pUri]:[]};
-  if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pUri};
-  return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};
-}
-
-function imgs(res){
-  if(res.images)return res.images.map(function(i){return typeof i==='string'?i:i.url;}).filter(Boolean);
-  if(res.image)return[typeof res.image==='string'?res.image:res.image.url];
-  return[];
-}
-
-function addCard(url){
-  var card=document.createElement('div');card.className='ic';card.dataset.url=url;
-  var img=document.createElement('img');img.src=url;img.loading='lazy';
-  var ov=document.createElement('div');ov.className='io';
-  var b1=document.createElement('button');b1.className='ib2';b1.dataset.a='dl';b1.textContent='Pobierz';
-  var b2=document.createElement('button');b2.className='ib2';b2.dataset.a='open';b2.textContent='Pelny';
-  ov.appendChild(b1);ov.appendChild(b2);card.appendChild(img);card.appendChild(ov);
-  document.getElementById('rGrid').appendChild(card);
-}
-
+function api(data){return fetch('/api',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(j.error||j.detail||j.message||'Blad '+res.status);return j;});});}
+function poll(key,reqId,endpoint){var start=Date.now(),attempts=0;function attempt(){return new Promise(function(r){setTimeout(r,2500);}).then(function(){attempts++;var e=Math.round((Date.now()-start)/1000);return api({action:'status',auth:'Key '+key,endpoint:endpoint,request_id:reqId}).then(function(d){document.getElementById('qi').textContent='Status: '+d.status+' - '+e+'s';if(d.status==='COMPLETED')return api({action:'result',auth:'Key '+key,endpoint:endpoint,request_id:reqId});if(d.status==='FAILED')throw new Error('Generowanie nieudane.');if(attempts>=80)throw new Error('Timeout');return attempt();});})}return attempt();}
+function payload(){var prompt=document.getElementById('promptTxt').value.trim();var info=MI[ep];if(!prompt&&info&&info.ph)prompt=info.ph;var type=info?info.t:et;if(type==='tryon')return{model_image:mUri,garment_image:pUri,category:S.cat,mode:S.mode,garment_photo_type:'auto'};if(ep.indexOf('image-to-image')!==-1)return{image_url:pUri,prompt:prompt,strength:0.8,num_inference_steps:28};if(ep.indexOf('nano-banana')!==-1||ep.indexOf('gemini')!==-1)return{prompt:prompt,image_urls:pUri?[pUri]:[]};if(ep.indexOf('flux-2/edit')!==-1)return{prompt:prompt,image_url:pUri};return{prompt:prompt,image_size:{width:768,height:1024},num_inference_steps:28,enable_safety_checker:false};}
+function imgs(res){if(res.images)return res.images.map(function(i){return typeof i==='string'?i:i.url;}).filter(Boolean);if(res.image)return[typeof res.image==='string'?res.image:res.image.url];return[];}
+function addCard(url){var card=document.createElement('div');card.className='ic';card.dataset.url=url;var img=document.createElement('img');img.src=url;img.loading='lazy';var ov=document.createElement('div');ov.className='io';var b1=document.createElement('button');b1.className='ib2';b1.dataset.a='dl';b1.textContent='Pobierz';var b2=document.createElement('button');b2.className='ib2';b2.dataset.a='open';b2.textContent='Pelny';ov.appendChild(b1);ov.appendChild(b2);card.appendChild(img);card.appendChild(ov);document.getElementById('rGrid').appendChild(card);}
 document.getElementById('genBtn').addEventListener('click',function(){
   if(busy)return;
   var key=document.getElementById('apiKey').value.trim();
@@ -426,41 +254,91 @@ document.getElementById('genBtn').addEventListener('click',function(){
   if(type==='tryon'&&!mUri){ss('Wgraj zdjecie modelki lub wybierz preset','err');return;}
   var shots=parseInt(document.getElementById('nShots').value);
   busy=true;document.getElementById('genBtn').disabled=true;
-  document.getElementById('emptyEl').style.display='none';
-  document.getElementById('rGrid').innerHTML='';
-  document.getElementById('sb').className='sb';
+  document.getElementById('emptyEl').style.display='none';document.getElementById('rGrid').innerHTML='';document.getElementById('sb').className='sb';
   document.getElementById('skelWrap').style.display='block';
   var sg=document.getElementById('skelGrid');sg.innerHTML='';
   for(var i=0;i<shots;i++){var sk=document.createElement('div');sk.className='sk';var skp=document.createElement('p');skp.textContent='Generowanie '+(i+1)+'/'+shots+'...';sk.appendChild(skp);sg.appendChild(sk);}
-  sp(10,'Wysylanie...');ss('Wysylanie do '+ep+'...','info');
-  document.getElementById('qi').style.display='block';
+  sp(10,'Wysylanie...');ss('Wysylanie do '+ep+'...','info');document.getElementById('qi').style.display='block';
   var results=[],tot=0;
-
   function doShot(idx){
-    if(idx>=shots){
-      document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';
-      results.forEach(function(res){imgs(res).forEach(function(url){addCard(url);tot++;});});
-      document.getElementById('rCount').textContent=tot+' zdiec';
-      sp(-1);ss('Gotowe! '+tot+' zdiec wygenerowanych.','ok');
-      busy=false;document.getElementById('genBtn').disabled=false;return;
-    }
+    if(idx>=shots){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';results.forEach(function(res){imgs(res).forEach(function(url){addCard(url);tot++;});});document.getElementById('rCount').textContent=tot+' zdiec';sp(-1);ss('Gotowe! '+tot+' zdiec wygenerowanych.','ok');busy=false;document.getElementById('genBtn').disabled=false;return;}
     sp(15+idx*20,'Zdjecie '+(idx+1)+'/'+shots+'...');
-    api({action:'submit',auth:'Key '+key,endpoint:ep,payload:payload()}).then(function(sub){
-      if(sub.request_id)return poll(key,sub.request_id,ep);
-      return sub;
-    }).then(function(res){results.push(res);doShot(idx+1);})
-    .catch(function(err){
-      document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';
-      sp(-1);ss('Blad: '+(err.message||'Nieznany blad'),'err');
-      document.getElementById('emptyEl').style.display='flex';
-      busy=false;document.getElementById('genBtn').disabled=false;
-    });
+    api({action:'submit',auth:'Key '+key,endpoint:ep,payload:payload()}).then(function(sub){if(sub.request_id)return poll(key,sub.request_id,ep);return sub;}).then(function(res){results.push(res);doShot(idx+1);}).catch(function(err){document.getElementById('skelWrap').style.display='none';document.getElementById('qi').style.display='none';sp(-1);ss('Blad: '+(err.message||'Nieznany blad'),'err');document.getElementById('emptyEl').style.display='flex';busy=false;document.getElementById('genBtn').disabled=false;});
   }
   doShot(0);
 });
-
 ui();
 })();
 </script>
 </body>
 </html>"""
+
+
+def fal_request(method, path, auth, body=None):
+    target = 'https://queue.fal.run/' + path
+    headers = {'Authorization': auth, 'User-Agent': 'AI-Model-Studio/2.0'}
+    if body:
+        headers['Content-Type'] = 'application/json'
+    req = urllib.request.Request(target, data=body, method=method, headers=headers)
+    ctx = ssl.create_default_context()
+    try:
+        with urllib.request.urlopen(req, context=ctx, timeout=30) as r:
+            return r.status, r.read()
+    except urllib.error.HTTPError as e:
+        return e.code, e.read()
+    except Exception as e:
+        return 502, json.dumps({'error': str(e)}).encode()
+
+
+@app.route('/')
+def index():
+    return HTML, 200, {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Security-Policy': "default-src * data: blob:; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; style-src * 'unsafe-inline'; img-src * data: blob:;"
+    }
+
+
+@app.route('/api', methods=['POST', 'OPTIONS'])
+def api():
+    if request.method == 'OPTIONS':
+        return '', 204, {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        }
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Invalid JSON'}), 400
+
+    action = data.get('action', '')
+    auth = data.get('auth', '')
+    endpoint = data.get('endpoint', '')
+
+    if action == 'submit':
+        body = json.dumps(data.get('payload', {})).encode()
+        status, resp = fal_request('POST', endpoint, auth, body)
+    elif action == 'status':
+        req_id = data.get('request_id', '')
+        status, resp = fal_request('GET', endpoint + '/requests/' + req_id + '/status', auth)
+    elif action == 'result':
+        req_id = data.get('request_id', '')
+        status, resp = fal_request('GET', endpoint + '/requests/' + req_id, auth)
+    else:
+        return jsonify({'error': 'unknown action: ' + action}), 400
+
+    try:
+        result = json.loads(resp)
+    except Exception:
+        result = {'raw': resp.decode('utf-8', errors='replace')}
+
+    return Response(
+        json.dumps(result),
+        status=status,
+        content_type='application/json',
+        headers={'Access-Control-Allow-Origin': '*'}
+    )
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 3333))
+    app.run(host='0.0.0.0', port=port)
